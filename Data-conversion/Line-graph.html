@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b6cee",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-gradient {
+            background: linear-gradient(180deg, rgba(43, 108, 238, 0.1) 0%, rgba(43, 108, 238, 0) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 font-display">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-3 shrink-0">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">query_stats</span>
+<h2 class="text-xl font-bold tracking-tight text-slate-900">ChartGen Pro</h2>
+</div>
+<div class="h-6 w-px bg-slate-200 mx-2"></div>
+<div class="flex flex-col">
+<h1 class="text-sm font-semibold text-slate-900">Revenue Projection 2024</h1>
+<p class="text-[11px] text-slate-500 uppercase tracking-wider font-medium">Manual Entry Mode</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-6 mr-4">
+<a class="text-slate-600 text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-slate-600 text-sm font-medium hover:text-primary transition-colors" href="#">Settings</a>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-9 px-4 bg-slate-100 text-slate-700 text-sm font-semibold hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined mr-2 text-lg">save</span>
+                        Save
+                    </button>
+<button class="flex items-center justify-center rounded-lg h-9 px-4 bg-primary text-white text-sm font-semibold shadow-sm shadow-primary/20 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined mr-2 text-lg">ios_share</span>
+                        Export
+                    </button>
+</div>
+<div class="ml-2 bg-slate-200 rounded-full size-9 bg-cover bg-center border border-slate-300" data-alt="User profile avatar portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCizfRYbKfHW59BiFupNcUIkJUSQzNF9mu3CCHG0TeG5elGRNHFp5v_qEO91auSH8gbGIRqoEPwgXCUVhOq9pTf8pVl1L-BklaZ_jxZS_1KWX2rk6ok4adYS-n6mg3qYfNE4h0EEcjT548F7okbzOzunLvgVUB7e8TONkbFypuSNqhzgIDJDNCaVrtZUIWM0pkBbGOcKqFC-s6Th-MvwOKkVRx2RTxlt_X2N_nr-84fcYOR0O1MkRGe0GhEt1O8cxtKfGyZlnGwn2o");'></div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex flex-1 overflow-hidden">
+<!-- Left Sidebar: Data Entry -->
+<aside class="w-[450px] border-r border-slate-200 bg-white flex flex-col">
+<div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<div>
+<h3 class="font-bold text-slate-800">Dataset Editor</h3>
+<p class="text-xs text-slate-500">Add or edit your chart coordinates</p>
+</div>
+<div class="flex gap-1">
+<button class="p-1.5 rounded hover:bg-slate-200 text-slate-600" title="Import CSV">
+<span class="material-symbols-outlined text-xl">upload_file</span>
+</button>
+<button class="p-1.5 rounded hover:bg-slate-200 text-slate-600" title="Table Settings">
+<span class="material-symbols-outlined text-xl">app_settings_alt</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-white z-10">
+<tr class="text-[11px] uppercase tracking-wider text-slate-500 border-b border-slate-200">
+<th class="px-6 py-3 font-semibold">X-Axis Label</th>
+<th class="px-6 py-3 font-semibold text-right">Y-Value</th>
+<th class="px-6 py-3 w-16"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="group hover:bg-primary/5 transition-colors">
+<td class="px-6 py-3">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-slate-900" type="text" value="Jan 2024"/>
+</td>
+<td class="px-6 py-3 text-right">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-right text-primary" type="text" value="12,500"/>
+</td>
+<td class="px-6 py-3 text-right">
+<button class="text-slate-300 group-hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-primary/5 transition-colors">
+<td class="px-6 py-3">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-slate-900" type="text" value="Feb 2024"/>
+</td>
+<td class="px-6 py-3 text-right">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-right text-primary" type="text" value="14,200"/>
+</td>
+<td class="px-6 py-3 text-right">
+<button class="text-slate-300 group-hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-primary/5 transition-colors bg-primary/5 border-l-2 border-primary">
+<td class="px-6 py-3">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-slate-900" type="text" value="Mar 2024"/>
+</td>
+<td class="px-6 py-3 text-right">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-right text-primary" type="text" value="13,800"/>
+</td>
+<td class="px-6 py-3 text-right">
+<button class="text-slate-300 group-hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-primary/5 transition-colors">
+<td class="px-6 py-3">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-slate-900" type="text" value="Apr 2024"/>
+</td>
+<td class="px-6 py-3 text-right">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-right text-primary" type="text" value="16,500"/>
+</td>
+<td class="px-6 py-3 text-right">
+<button class="text-slate-300 group-hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-primary/5 transition-colors">
+<td class="px-6 py-3">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-slate-900" type="text" value="May 2024"/>
+</td>
+<td class="px-6 py-3 text-right">
+<input class="w-full bg-transparent border-none p-0 text-sm font-medium focus:ring-0 text-right text-primary" type="text" value="19,000"/>
+</td>
+<td class="px-6 py-3 text-right">
+<button class="text-slate-300 group-hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Sidebar Footer Controls -->
+<div class="p-6 border-t border-slate-200 bg-slate-50">
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 rounded-lg h-10 bg-white border border-slate-200 text-slate-700 text-sm font-bold hover:bg-slate-50">
+<span class="material-symbols-outlined text-lg">add</span>
+                            Add Row
+                        </button>
+<button class="flex items-center justify-center gap-2 rounded-lg h-10 bg-white border border-slate-200 text-slate-700 text-sm font-bold hover:bg-slate-50">
+<span class="material-symbols-outlined text-lg">clear_all</span>
+                            Clear All
+                        </button>
+</div>
+</div>
+</aside>
+<!-- Right Sidebar: Chart Preview -->
+<section class="flex-1 bg-background-light p-8 overflow-y-auto">
+<div class="max-w-5xl mx-auto space-y-6">
+<!-- Chart Header -->
+<div class="flex items-end justify-between">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 tracking-tight">Real-time Visualization</h2>
+<p class="text-slate-500 text-sm mt-1">Changes to the table update this view instantly.</p>
+</div>
+<div class="flex bg-white rounded-lg border border-slate-200 p-1 shadow-sm">
+<button class="px-3 py-1 text-xs font-bold text-primary bg-primary/10 rounded">Line</button>
+<button class="px-3 py-1 text-xs font-bold text-slate-500 hover:text-slate-700">Bar</button>
+<button class="px-3 py-1 text-xs font-bold text-slate-500 hover:text-slate-700">Area</button>
+</div>
+</div>
+<!-- Main Chart Container -->
+<div class="relative bg-white border border-slate-200 rounded-xl shadow-lg p-8 h-[500px] flex flex-col">
+<!-- Chart Toolbars Overlay -->
+<div class="absolute top-6 right-8 flex gap-2">
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">zoom_in</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">grid_on</span>
+</button>
+<button class="size-8 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">auto_fix_high</span>
+</button>
+</div>
+<!-- Chart Title -->
+<div class="text-center mb-8">
+<h3 class="text-lg font-bold text-slate-800">Monthly Revenue Growth</h3>
+<p class="text-xs text-slate-400 uppercase tracking-widest font-semibold mt-1">Fiscal Year 2024</p>
+</div>
+<!-- Mock Line Chart Area -->
+<div class="flex-1 relative flex items-end">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="w-full h-px bg-slate-100"></div>
+<div class="w-full h-px bg-slate-100"></div>
+<div class="w-full h-px bg-slate-100"></div>
+<div class="w-full h-px bg-slate-100"></div>
+<div class="w-full h-px bg-slate-200"></div> <!-- Baseline -->
+</div>
+<!-- Line and Points Drawing (SVG) -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 800 300">
+<!-- Area Fill -->
+<path d="M 50,220 C 150,200 250,150 350,165 C 450,180 550,100 650,80 L 650,300 L 50,300 Z" fill="url(#chartFill)"></path>
+<!-- Smooth Curve -->
+<path d="M 50,220 C 150,200 250,150 350,165 C 450,180 550,100 650,80" fill="none" stroke="#2b6cee" stroke-linecap="round" stroke-width="4"></path>
+<!-- Gradient Definition -->
+<defs>
+<lineargradient id="chartFill" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#2b6cee;stop-opacity:0.15"></stop>
+<stop offset="100%" style="stop-color:#2b6cee;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<!-- Data Points -->
+<circle cx="50" cy="220" fill="white" r="6" stroke="#2b6cee" stroke-width="3"></circle>
+<circle cx="200" cy="190" fill="white" r="6" stroke="#2b6cee" stroke-width="3"></circle>
+<circle cx="350" cy="165" fill="#2b6cee" r="8" stroke="white" stroke-width="3"></circle> <!-- Active Point -->
+<circle cx="500" cy="120" fill="white" r="6" stroke="#2b6cee" stroke-width="3"></circle>
+<circle cx="650" cy="80" fill="white" r="6" stroke="#2b6cee" stroke-width="3"></circle>
+</svg>
+<!-- Tooltip Mockup -->
+<div class="absolute left-[330px] top-[100px] bg-slate-900 text-white p-2 rounded shadow-xl text-xs flex flex-col items-center pointer-events-none">
+<span class="font-bold">Mar 2024</span>
+<span class="text-primary-300">$13,800</span>
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
+</div>
+<!-- X Axis Labels -->
+<div class="absolute bottom-[-30px] w-full flex justify-between px-10 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+<span>Jan</span>
+<span>Feb</span>
+<span>Mar</span>
+<span>Apr</span>
+<span>May</span>
+<span>Jun</span>
+</div>
+</div>
+</div>
+<!-- Quick Settings Footer -->
+<div class="grid grid-cols-3 gap-6">
+<div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm">
+<label class="text-xs font-bold text-slate-500 uppercase mb-2 block tracking-tight">Chart Color</label>
+<div class="flex gap-2">
+<div class="size-6 rounded-full bg-primary cursor-pointer border-2 border-white ring-2 ring-primary/20"></div>
+<div class="size-6 rounded-full bg-emerald-500 cursor-pointer"></div>
+<div class="size-6 rounded-full bg-amber-500 cursor-pointer"></div>
+<div class="size-6 rounded-full bg-rose-500 cursor-pointer"></div>
+<div class="size-6 rounded-full bg-purple-500 cursor-pointer"></div>
+</div>
+</div>
+<div class="bg-white p-5 rounded-lg border border-slate-200 shadow-sm col-span-2 flex items-center justify-between">
+<div class="flex gap-8">
+<div>
+<label class="text-xs font-bold text-slate-500 uppercase mb-1 block">Smoothing</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium">Bezier Curve</span>
+<span class="material-symbols-outlined text-primary">toggle_on</span>
+</div>
+</div>
+<div class="h-10 w-px bg-slate-100"></div>
+<div>
+<label class="text-xs font-bold text-slate-500 uppercase mb-1 block">Data Points</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium">Always Visible</span>
+<span class="material-symbols-outlined text-primary">toggle_on</span>
+</div>
+</div>
+<div class="h-10 w-px bg-slate-100"></div>
+<div>
+<label class="text-xs font-bold text-slate-500 uppercase mb-1 block">Axis Labels</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium">Automatic</span>
+<span class="material-symbols-outlined text-primary">toggle_on</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>
