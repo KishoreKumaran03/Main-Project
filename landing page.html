@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DataViz AI - Refined Visuals</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f8f9fb",
+                        "background-dark": "#0a0f1a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    fontSize: {
+                        'xs': '1.4rem',
+                        'sm': '1.8rem',
+                        'base': '0.9rem',
+                        'lg': '1rem',
+                        'xl': '1.125rem',
+                        '2xl': '1.25rem',
+                        '3xl': '1.5rem',
+                        '4xl': '1.875rem',
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            @apply text-slate-800 dark:text-slate-200 bg-background-light dark:bg-background-dark;
+        }
+        .chart-card-gradient {
+            background: linear-gradient(135deg, rgba(19, 91, 236, 0.08) 0%, rgba(19, 91, 236, 0.01) 100%);
+        }
+        .staggered-grid > div:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(19, 91, 236, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display">
+<header class="sticky top-0 z-50 w-full bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-primary/10 px-4 py-2 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1 rounded-md">
+<span class="material-icons text-white text-base">bar_chart</span>
+</div>
+<span class="font-bold text-base tracking-tight">DataViz AI</span>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-md text-xs font-semibold">
+        Start Now
+    </button>
+</header>
+<main class="w-full">
+<section class="px-5 py-12 flex flex-col items-center text-center">
+<span class="inline-block px-2 py-0.5 bg-primary/15 text-primary rounded-full text-[10px] font-bold mb-3 uppercase tracking-tighter">Enterprise Data Logic</span>
+<h1 class="text-3xl font-bold leading-tight mb-4 tracking-tight">
+            Text to <span class="text-primary">Pictorial</span> Insights
+        </h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-6 max-w-[280px]">
+            The high-fidelity engine that converts textual descriptions into professional grade visualizations.
+        </p>
+<div class="w-full max-w-[260px] space-y-3">
+<button class="w-full bg-primary text-white py-3 rounded-lg font-bold text-base shadow-lg shadow-primary/20">
+                Deploy Project
+            </button>
+<p class="text-[10px] text-slate-500 font-medium">v4.2.0 • API Enabled • Mobile Native</p>
+</div>
+<div class="mt-10 w-full relative">
+<div class="absolute inset-0 bg-primary/10 blur-3xl -z-10 rounded-full"></div>
+<img alt="Dashboard Preview" class="rounded-xl border border-primary/10 shadow-xl opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQCreZovM2FxbAQtRVqTNzePkI6HRK0AwEpy08xBw5bKoPS6ZQ-SEegdqjSBb0PS83KuX85qu8W-wkZssT8P-OB6BRxGjDl8gEkYLhfAuQi6quhnCmrQ9-_2zTa3DB1-FcpM37aScmRslJVFAO-0jZ9L-YDMRbGg-n6qJWW9Qx8d40F5Oj0VIsHxZekk3lZ8bAq67yLvdbUMqUvtKyEoCxdfDHv8lKDl-qmNCu5jF-aKXyuDcxG3-S_wqb-2BonSPc-8Q-TawkSpw"/>
+</div>
+</section>
+<section class="px-5 py-12 border-y border-primary/5">
+<div class="mb-10">
+<h2 class="text-xl font-bold mb-1">Architecture</h2>
+<p class="text-xs text-slate-500 uppercase tracking-widest font-semibold">System Workflow</p>
+</div>
+<div class="space-y-12 staggered-grid">
+<div class="flex items-center gap-5">
+<div class="w-1/2">
+<img alt="Input process" class="rounded-lg shadow-sm border border-primary/5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCocTJXjyjp2vBR3nx6X607C8m20Tpo6cKiBMYyeluAzy1TRiXi1QWcBivV1rtKlkK_Lt3FCYwHtLiKqvdDn2ysR78n-Cl3x65sUPxupl_QSJly9yp3Q8EemQO_IhW_4yEpNDOA7nqbBHH5GfiEErRWoaNWlMC2oi1NNjx4moglKo4dq-anlG49RZ6veAUYRqBJCSQ98ujL9K_uOuIe6PnvBmaqPJHTlFvFGqz33kxMPaVwx9vbowekjOXvmj4vxtiIwtNV7bhb28"/>
+</div>
+<div class="w-1/2">
+<div class="text-primary font-bold text-xs mb-1">01. INGESTION</div>
+<h3 class="font-bold text-sm mb-1 leading-tight">Data Stream Mapping</h3>
+<p class="text-slate-500 text-[11px] leading-relaxed">Directly parse CSV, JSON, or natural language prompts into our structured engine.</p>
+</div>
+</div>
+<div class="flex items-center gap-5">
+<div class="w-1/2">
+<img alt="AI Processing" class="rounded-lg shadow-sm border border-primary/5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFduQNUrLzpCLimQh9anIijxbvV3UMlsqSbRY3hkeGKtnqBbfRKgrYYMlRmRxCQteB1XkaAFTLINTCJd-Qul7nOjjizLv2htL7daZWBUonKOkJGsUBnx7LAAm4UKUGBErm2TEHq1xQgycYIh36xWxHnhlw8ygyXV6b4wbQoLIl8Q1UgPnV9hegKQbogfk_7IbQ-LP0jls-CPMaOBaEFzkzjzGU7ERJDhzJy_HSCr3l0TviThk66ytc-pIW7AHQ8ZaZkdkqJTFXhlE"/>
+</div>
+<div class="w-1/2">
+<div class="text-primary font-bold text-xs mb-1">02. ANALYSIS</div>
+<h3 class="font-bold text-sm mb-1 leading-tight">Neural Rendering</h3>
+<p class="text-slate-500 text-[11px] leading-relaxed">AI determines optimal visual heuristics based on data cardinality and type.</p>
+</div>
+</div>
+<div class="flex items-center gap-5">
+<div class="w-1/2">
+<img alt="Exporting" class="rounded-lg shadow-sm border border-primary/5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLcFsa6r_vFdnjPlrasIOszR5p76ceatXtyAW05fnhwYlCrku1ppT2tBwnsg8EaHjq0iih54VVk2kYZP58nvjYYikmEYuE85fogY093cGp22ANlKfT-vB1JYrQRvF77szrbWliWVyVFPnnyc72rlmgYurndwHQtuL2UrhKTzgX4sq_EVAtcLpWyA1oZD-AEzgWz1YLUyAquzqiV_ZnHIOAcjEnHHsXODx1JYSyUp92I0BvVMGWs6a1zCFSOvKLgs8Q6Yu11SA75SA"/>
+</div>
+<div class="w-1/2">
+<div class="text-primary font-bold text-xs mb-1">03. OUTPUT</div>
+<h3 class="font-bold text-sm mb-1 leading-tight">Vectorized Assets</h3>
+<p class="text-slate-500 text-[11px] leading-relaxed">Export lossless SVG, PNG, or embed dynamic components directly into your stack.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="px-5 py-12">
+<div class="mb-8 flex items-end justify-between">
+<div>
+<h2 class="text-xl font-bold mb-1">Library</h2>
+<p class="text-xs text-slate-500">Available Visual Schema</p>
+</div>
+<a class="text-primary text-[11px] font-bold border-b border-primary/20 pb-0.5" href="#">EXPLORE ALL</a>
+</div>
+<div class="space-y-4">
+<div class="chart-card-gradient p-4 rounded-xl border border-primary/10 hover-lift group">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-2">
+<span class="material-icons text-primary text-lg">leaderboard</span>
+<h4 class="font-bold text-sm">Comparison Matrix</h4>
+</div>
+<span class="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase">Optimized</span>
+</div>
+<img alt="Bar Chart" class="rounded-lg h-36 w-full object-cover mb-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCocTJXjyjp2vBR3nx6X607C8m20Tpo6cKiBMYyeluAzy1TRiXi1QWcBivV1rtKlkK_Lt3FCYwHtLiKqvdDn2ysR78n-Cl3x65sUPxupl_QSJly9yp3Q8EemQO_IhW_4yEpNDOA7nqbBHH5GfiEErRWoaNWlMC2oi1NNjx4moglKo4dq-anlG49RZ6veAUYRqBJCSQ98ujL9K_uOuIe6PnvBmaqPJHTlFvFGqz33kxMPaVwx9vbowekjOXvmj4vxtiIwtNV7bhb28"/>
+<p class="text-[11px] text-slate-500 leading-snug">Discrete data comparison with automated scaling and axis normalization.</p>
+</div>
+<div class="chart-card-gradient p-4 rounded-xl border border-primary/10 hover-lift group">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-2">
+<span class="material-icons text-primary text-lg">pie_chart</span>
+<h4 class="font-bold text-sm">Composition Hub</h4>
+</div>
+</div>
+<img alt="Pie Chart" class="rounded-lg h-36 w-full object-cover mb-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFduQNUrLzpCLimQh9anIijxbvV3UMlsqSbRY3hkeGKtnqBbfRKgrYYMlRmRxCQteB1XkaAFTLINTCJd-Qul7nOjjizLv2htL7daZWBUonKOkJGsUBnx7LAAm4UKUGBErm2TEHq1xQgycYIh36xWxHnhlw8ygyXV6b4wbQoLIl8Q1UgPnV9hegKQbogfk_7IbQ-LP0jls-CPMaOBaEFzkzjzGU7ERJDhzJy_HSCr3l0TviThk66ytc-pIW7AHQ8ZaZkdkqJTFXhlE"/>
+<p class="text-[11px] text-slate-500 leading-snug">Proportional distribution analysis with dynamic labeling and legend generation.</p>
+</div>
+<div class="chart-card-gradient p-4 rounded-xl border border-primary/10 hover-lift group">
+<div class="flex justify-between items-center mb-3">
+<div class="flex items-center gap-2">
+<span class="material-icons text-primary text-lg">insights</span>
+<h4 class="font-bold text-sm">Temporal Trends</h4>
+</div>
+</div>
+<img alt="Line Chart" class="rounded-lg h-36 w-full object-cover mb-3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLcFsa6r_vFdnjPlrasIOszR5p76ceatXtyAW05fnhwYlCrku1ppT2tBwnsg8EaHjq0iih54VVk2kYZP58nvjYYikmEYuE85fogY093cGp22ANlKfT-vB1JYrQRvF77szrbWliWVyVFPnnyc72rlmgYurndwHQtuL2UrhKTzgX4sq_EVAtcLpWyA1oZD-AEzgWz1YLUyAquzqiV_ZnHIOAcjEnHHsXODx1JYSyUp92I0BvVMGWs6a1zCFSOvKLgs8Q6Yu11SA75SA"/>
+<p class="text-[11px] text-slate-500 leading-snug">Continuous data flow visualization with regression line capabilities.</p>
+</div>
+</div>
+</section>
+<section class="px-5 py-12 bg-primary/[0.02]">
+<div class="text-center mb-8">
+<h2 class="text-xl font-bold mb-1">Subscription</h2>
+<p class="text-xs text-slate-500">Technical access tiers</p>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<div class="p-5 rounded-xl border border-primary/10 bg-white/50 dark:bg-slate-900/50">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-bold text-sm">Standard</h4>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-bold">$0</span>
+<span class="text-slate-500 text-[10px]">/mo</span>
+</div>
+</div>
+<button class="px-3 py-1 rounded-md border border-primary/20 text-primary font-bold text-[10px] uppercase">Select</button>
+</div>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 text-[11px] text-slate-500">
+<span class="material-icons text-primary text-xs">check</span> 3 Active projects
+                    </li>
+<li class="flex items-center gap-2 text-[11px] text-slate-500">
+<span class="material-icons text-primary text-xs">check</span> PNG Exports
+                    </li>
+</ul>
+</div>
+<div class="p-5 rounded-xl border-2 border-primary bg-primary/5 relative overflow-hidden">
+<div class="absolute -top-1 -right-4 bg-primary text-white text-[8px] font-bold px-4 py-1 rotate-12">ELITE</div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-bold text-sm">Professional</h4>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-bold">$19</span>
+<span class="text-slate-500 text-[10px]">/mo</span>
+</div>
+</div>
+<button class="px-3 py-1 rounded-md bg-primary text-white font-bold text-[10px] uppercase">Active</button>
+</div>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 text-[11px] font-medium">
+<span class="material-icons text-primary text-xs">check</span> Unlimited rendering
+                    </li>
+<li class="flex items-center gap-2 text-[11px] font-medium">
+<span class="material-icons text-primary text-xs">check</span> Raw SVG &amp; API Access
+                    </li>
+</ul>
+</div>
+</div>
+</section>
+<section class="px-5 py-12">
+<div class="bg-slate-900 rounded-2xl p-6 text-center text-white border border-white/5">
+<h2 class="text-xl font-bold mb-3">Begin Compilation</h2>
+<p class="text-[11px] text-slate-400 mb-6 leading-relaxed">Join 10,000+ engineers leveraging our visualization primitives for data storytelling.</p>
+<button class="w-full bg-primary text-white py-3 rounded-lg font-bold text-sm active:scale-[0.98] transition-all">
+                Create Free Account
+            </button>
+</div>
+</section>
+</main>
+<footer class="bg-background-dark text-slate-500 px-6 py-10 text-[11px] border-t border-white/5">
+<div class="flex items-center gap-2 text-white mb-6">
+<div class="bg-primary/20 p-1 rounded">
+<span class="material-icons text-primary text-xs">bar_chart</span>
+</div>
+<span class="font-bold tracking-tight text-xs uppercase">DataViz AI Core</span>
+</div>
+<div class="grid grid-cols-2 gap-8 mb-8">
+<div class="space-y-2">
+<p class="text-white font-bold text-[10px] uppercase tracking-wider">Interface</p>
+<p>API Reference</p>
+<p>Cloud Shell</p>
+<p>Schema Docs</p>
+</div>
+<div class="space-y-2">
+<p class="text-white font-bold text-[10px] uppercase tracking-wider">Protocol</p>
+<p>Security</p>
+<p>Terms of Ops</p>
+<p>Privacy Layer</p>
+</div>
+</div>
+<div class="pt-8 border-t border-white/5 flex flex-col gap-4">
+<div class="flex gap-4 opacity-50">
+<span class="material-icons text-sm">code</span>
+<span class="material-icons text-sm">terminal</span>
+<span class="material-icons text-sm">settings_ethernet</span>
+</div>
+<p>© 2024 DATAVIZ_ENGINE_V4. Build 8821.0</p>
+</div>
+<div class="h-6"></div>
+</footer>
+
+</body></html>
