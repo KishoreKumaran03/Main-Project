@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EasyViz - Revenue &amp; Profit Insights</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3f51b5",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1e293b",
+                        "chart-blue": "#5865f2",
+                        "chart-green": "#2ca579",
+                        "chart-orange": "#ff9f43",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #f472b6;
+            --profit-line: #22d3ee;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .donut-segment { transition: all 0.3s ease; }
+        .chart-bar { transition: height 0.6s ease-out; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .premium-shadow {
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+        /* UI hover lift + shadow for interactive elements */
+        .ui-hover, aside a, aside button, header button, main button, .chart-bar, .tooltip-trigger > div, .card {
+            transition: transform 180ms ease, box-shadow 180ms ease;
+        }
+        .ui-hover:hover, aside a:hover, aside button:hover, header button:hover, main button:hover, .chart-bar:hover, .tooltip-trigger > div:hover, .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.08);
+        }
+        /* Keep sidebar rail toggle fully static on hover */
+        #sidebarRailToggle,
+        #sidebarRailToggle:hover {
+            transform: none !important;
+            box-shadow: none !important;
+            transition: none !important;
+        }
+        .soft-gradient-blue { fill: url(#grad-blue); }
+        .soft-gradient-green { fill: url(#grad-green); }
+        .soft-gradient-orange { fill: url(#grad-orange); }
+        .chart-bar-hover:hover .tooltip-trigger {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* Sidebar collapse state */
+        aside, main { transition: all 220ms ease; }
+        body.sidebar-collapsed aside { width: 5rem; }
+        body.sidebar-collapsed main { margin-left: 5rem; }
+        body.sidebar-collapsed aside nav h3,
+        body.sidebar-collapsed aside nav a span:last-child,
+        body.sidebar-collapsed aside nav button span:last-child,
+        body.sidebar-collapsed aside > div:first-child > span:last-child,
+        body.sidebar-collapsed aside > div:last-child a span:last-child,
+        body.sidebar-collapsed aside > div:last-child button span:last-child,
+        body.sidebar-collapsed aside > div:last-child .flex.items-center.justify-between > div > span:last-child {
+            display: none;
+        }
+        body.sidebar-collapsed aside nav a,
+        body.sidebar-collapsed aside nav button,
+        body.sidebar-collapsed aside > div:last-child a,
+        body.sidebar-collapsed aside > div:last-child > button:first-child {
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+<aside id="sidebar" class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col fixed h-full z-20">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<span class="text-xl font-bold tracking-tight">EasyViz</span>
+</div>
+<button id="sidebarRailToggle" aria-label="Collapse sidebar" onclick="toggleSidebar()" class="absolute top-[44%] -translate-y-1/2 left-full w-6 h-16 rounded-r-full rounded-l-none border border-l-0 border-slate-200/80 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 shadow-none flex items-center justify-center z-30">
+<span id="sidebarRailToggleIcon" class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<nav class="flex-1 px-4 py-4 space-y-6 overflow-y-auto">
+<button class="w-full flex items-center gap-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-xl font-semibold border border-indigo-100 dark:border-indigo-800 transition-all ui-hover">
+<span class="material-symbols-outlined text-indigo-500">auto_awesome</span>
+<span>Ask Yua AI</span>
+</button>
+<div class="space-y-1">
+<a class="flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-800 text-primary font-semibold rounded-xl ui-hover" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<span class="material-symbols-outlined">database</span>
+<span>Data Sources</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<span class="material-symbols-outlined">star</span>
+<span>Favorites</span>
+</a>
+</div>
+<div class="space-y-1">
+<h3 class="px-3 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">MY DATA</h3>
+<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span>My Files</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<span class="material-symbols-outlined">table_chart</span>
+<span>Datasets</span>
+</a>
+</div>
+<div class="space-y-1">
+<h3 class="px-3 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">ANALYSIS</h3>
+<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span>Advanced Analytics</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span>Reports</span>
+</a>
+</div>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<main id="mainContent" class="ml-64 flex-1 flex flex-col min-w-0">
+<header class="h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4 px-4 md:px-8 sticky top-0 z-10">
+<div class="relative flex-1 min-w-[11rem] max-w-[clamp(16rem,52vw,52rem)]">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-indigo-500">auto_awesome</span>
+<input class="w-full pl-12 pr-16 py-3 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" placeholder="Type to search or ask Yua AI..." type="text"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-1.5 py-0.5 rounded text-[10px] text-slate-400 font-mono">
+<span class="material-symbols-outlined text-lg">search</span>
+            </div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-base">light_mode</span>
+<span class="text-sm font-medium">Dark Mode</span>
+<button class="w-12 h-6 bg-slate-300 dark:bg-emerald-500 rounded-full relative transition-all shadow-sm cursor-pointer hover:shadow-md" onclick="document.documentElement.classList.toggle('dark')">
+<div class="absolute top-0.5 left-0.5 dark:left-6 w-5 h-5 bg-white rounded-full transition-all shadow-md flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-slate-600 dark:text-emerald-600">light_mode</span>
+</div>
+</button>
+</div>
+<button class="bg-primary text-white px-6 py-2.5 rounded-xl font-medium flex items-center gap-2 hover:opacity-90 shadow-lg shadow-primary/20 transition-all ui-hover">
+<span class="material-symbols-outlined text-sm">add</span>
+                Import Data
+            </button>
+<div class="relative group">
+<button class="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 px-4 py-2.5 rounded-xl font-medium flex items-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined text-sm">download</span>
+                Export
+            </button>
+<div class="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+<button onclick="exportPDF()" class="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-base text-red-500">picture_as_pdf</span>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-white">PDF Report</div>
+<div class="text-xs text-slate-400">Full dashboard summary</div>
+</div>
+</button>
+<button onclick="exportCSV()" class="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-base text-green-600">table_chart</span>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-white">Excel CSV</div>
+<div class="text-xs text-slate-400">Monthly raw data</div>
+</div>
+</button>
+<button onclick="exportPNG()" class="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-base text-blue-500">image</span>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-white">PNG Snapshot</div>
+<div class="text-xs text-slate-400">Chart image</div>
+</div>
+</button>
+<button onclick="exportWithAI()" class="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20">
+<span class="material-symbols-outlined text-base text-indigo-600">auto_awesome</span>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-white">Export + AI Summary</div>
+<div class="text-xs text-slate-400">PDF with insights</div>
+</div>
+</button>
+</div>
+</div>
+<div class="relative cursor-pointer text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors group">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-red-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
+<div class="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700">
+<h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-red-500">warning</span> Smart Alerts
+</h3>
+</div>
+<div class="max-h-96 overflow-y-auto">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-amber-500 text-lg flex-shrink-0">trending_down</span>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Revenue Dip Alert</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">April revenue dropped 18% vs March</p>
+<p class="text-xs text-slate-400 mt-2">📊 Reason: Post-Q4 inventory clearance</p>
+</div>
+</div>
+</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-emerald-500 text-lg flex-shrink-0">location_on</span>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Regional Milestone</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Western India crossed ₹8.4L milestone</p>
+<p class="text-xs text-slate-400 mt-2">🎉 Top performer region</p>
+</div>
+</div>
+</div>
+<div class="p-4 border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-red-500 text-lg flex-shrink-0">trending_down</span>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Margin Alert</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Profit margin below target for 2 months</p>
+<p class="text-xs text-slate-400 mt-2">⚠️ Recommended: Review cost structures</p>
+</div>
+</div>
+</div>
+<div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-blue-500 text-lg flex-shrink-0">info</span>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Festive Season Boost</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Festive months show +18% avg uplift</p>
+<p class="text-xs text-slate-400 mt-2">📈 Oct-Dec peak performance period</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-3 border-t border-slate-200 dark:border-slate-700 text-center">
+<button class="text-xs font-bold text-primary hover:underline">View All Alerts</button>
+</div>
+</div>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white dark:border-slate-700 shadow-sm cursor-pointer ring-2 ring-primary/10">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvR1wMt9PcZRoXcuumR6RSn0zz_psqYLzngRQMkKDpf3_k3K2Ynt5yRvC7j8YAbuN57qhaqwYU23cMqcqGkD41ZWWx--LCrH_JrTI3BKMwviw2JUWbEuWoAGvbV9QvgsaUFiCw4fG-sWQzcZeJD2xKdcRVmR5DoDTnUUPn7qWnyqUNsA1dgq-vKufaWos-9H_mduhsIgX0RcdWlIY_-_celVL--6SJTC2C7uCtyxc4MhVM-_ES-OQCDJTe105QZpEmB3PnFO_BJMU"/>
+</div>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<div class="flex flex-wrap gap-3 items-center bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+<span class="text-sm font-bold text-slate-600 dark:text-slate-400">Quick Filters:</span>
+<div class="relative group">
+<button class="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-base">location_on</span> Region
+</button>
+<div class="absolute left-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+<button onclick="filterByRegion('all')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">All Regions</button>
+<button onclick="filterByRegion('western')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">Western India</button>
+<button onclick="filterByRegion('southern')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">Southern India</button>
+<button onclick="filterByRegion('northern')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-sm">Northern India</button>
+</div>
+</div>
+<div class="relative group">
+<button class="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-base">category</span> Category
+</button>
+<div class="absolute left-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+<button onclick="filterByCategory('all')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">All Categories</button>
+<button onclick="filterByCategory('electronics')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">Electronics (50%)</button>
+<button onclick="filterByCategory('furniture')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">Furniture (30%)</button>
+<button onclick="filterByCategory('others')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-sm">Others (20%)</button>
+</div>
+</div>
+<div class="relative group">
+<button class="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-base">business</span> Segment
+</button>
+<div class="absolute left-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+<button onclick="filterBySegment('all')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">All Segments</button>
+<button onclick="filterBySegment('enterprise')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">Enterprise (₹14.2L)</button>
+<button onclick="filterBySegment('retail')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 border-b border-slate-200 dark:border-slate-700 text-sm">Retail (₹8.5L)</button>
+<button onclick="filterBySegment('online')" class="w-full text-left px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-sm">Online (₹4.1L)</button>
+</div>
+</div>
+<button onclick="resetFilters()" class="px-4 py-2 bg-slate-300 dark:bg-slate-600 text-slate-900 dark:text-white rounded-lg text-sm font-medium hover:bg-slate-400 dark:hover:bg-slate-500 flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-base">restart_alt</span> Reset
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-card-light dark:bg-card-dark p-6 rounded-3xl premium-shadow border border-slate-100 dark:border-slate-800 ui-hover">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Revenue</span>
+<div class="p-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl text-indigo-600 dark:text-indigo-400">
+<span class="material-symbols-outlined">payments</span>
+</div>
+</div>
+    <div class="text-3xl font-bold mb-3 tracking-tight">₹26.8L</div>
+    <div class="flex items-center gap-2">
+    <span class="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-lg flex items-center gap-1">
+                        +12.5%
+                    </span>
+    <span class="text-xs text-slate-400">last month</span>
+    </div>
+    <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Forecast: ₹29.5L next 3 months (+10%)</p>
+    </div>
+    </div>
+<div class="bg-card-light dark:bg-card-dark p-6 rounded-3xl premium-shadow border border-slate-100 dark:border-slate-800 ui-hover">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Active Markets</span>
+<div class="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl text-emerald-600 dark:text-emerald-400">
+<span class="material-symbols-outlined">public</span>
+</div>
+</div>
+    <div class="text-3xl font-bold mb-3 tracking-tight">24</div>
+    <div class="flex items-center gap-2">
+    <span class="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-lg flex items-center gap-1">
+                        +3
+                    </span>
+    <span class="text-xs text-slate-400">states added</span>
+    </div>
+    <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Forecast: 27 active markets next 3 months (+12.5%)</p>
+    </div>
+    </div>
+<div class="bg-card-light dark:bg-card-dark p-6 rounded-3xl premium-shadow border border-slate-100 dark:border-slate-800 ui-hover">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Users</span>
+<div class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+</div>
+    <div class="text-3xl font-bold mb-3 tracking-tight">12.4k</div>
+    <div class="flex items-center gap-2">
+    <span class="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-lg flex items-center gap-1">
+                        +18.9%
+                    </span>
+    <span class="text-xs text-slate-400">pan-india</span>
+    </div>
+    <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+    <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Forecast: 13.8k users next 3 months (+11%)</p>
+    </div>
+    </div>
+<div class="bg-card-light dark:bg-card-dark p-6 rounded-3xl premium-shadow border border-slate-100 dark:border-slate-800 ui-hover">
+<div class="flex justify-between items-start mb-4">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Growth Rate</span>
+<div class="p-2 bg-amber-50 dark:bg-amber-900/30 rounded-xl text-amber-600 dark:text-amber-400">
+<span class="material-symbols-outlined text-amber-500">trending_up</span>
+</div>
+</div>
+<div class="text-3xl font-bold mb-3 tracking-tight">21.4%</div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-lg flex items-center gap-1">
+                        +4.2%
+                    </span>
+<span class="text-xs text-slate-400">avg. growth</span>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+<p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Forecast: ₹16.2L next 3 months (+9%)</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+<div class="bg-card-light dark:bg-card-dark border border-slate-100 dark:border-slate-800 p-6 rounded-2xl shadow-elevated ui-hover">
+<div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
+<div>
+<h4 class="text-base font-bold text-slate-900 dark:text-white">Revenue &amp; Profit Trend</h4>
+<p class="text-xs text-slate-400">Monthly performance with AI-driven insights</p>
+<div class="flex items-center gap-4 mt-2 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+<div class="flex items-center gap-2">
+<span class="inline-block w-6 border-t-2 border-dashed" style="border-color: var(--primary-color);"></span>
+<span>Revenue (dotted)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-block w-6 border-t-2" style="border-color: var(--profit-line);"></span>
+<span>Profit % (solid)</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2 flex-wrap items-center">
+<button onclick="explainChart()" class="px-3 py-1.5 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 border border-amber-200 dark:border-amber-700/50 text-amber-700 dark:text-amber-400 text-xs font-bold rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>Explain
+</button>
+<button onclick="toggleComparison()" id="comparisonBtn" class="px-3 py-1.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">compare</span>Compare
+</button>
+<button class="timeRangeBtn px-3 py-1.5 bg-primary text-white text-xs font-bold rounded-lg transition-all active" data-range="1m">1M</button>
+<button class="timeRangeBtn px-3 py-1.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all" data-range="3m">3M</button>
+<button class="timeRangeBtn px-3 py-1.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all" data-range="6m">6M</button>
+<button class="timeRangeBtn px-3 py-1.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all" data-range="ytd">YTD</button>
+<button class="timeRangeBtn px-3 py-1.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-all" data-range="custom">Custom</button>
+</div>
+</div>
+<div class="h-64 w-full flex items-end justify-between gap-4 px-2 relative mb-6">
+    <div class="absolute inset-0 flex flex-col justify-between pointer-events-none pb-1 pt-2">
+        <div class="w-full border-t border-slate-100 dark:border-slate-800"></div>
+        <div class="w-full border-t border-slate-100 dark:border-slate-800"></div>
+        <div class="w-full border-t border-slate-100 dark:border-slate-800"></div>
+        <div class="w-full border-t border-slate-100 dark:border-slate-800"></div>
+    </div>
+
+    <!-- JAN -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[40%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">JAN</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">January Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹3,40,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">18.2%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight"><span class="material-symbols-outlined text-[14px] align-middle mr-1 text-amber-500">lightbulb</span> Insight: Stable performance following holiday inventory clearance.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- FEB -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[65%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">FEB</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">February Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹4,20,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">20.5%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Increase due to early spring product launches in metros.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- MAR -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[55%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">MAR</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">March Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹5,85,200</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">24.1%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Record high due to end-of-year tax planning sales &amp; festive offers.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- APR -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[80%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">APR</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">April Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹3,90,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">19.8%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Slight dip following the heavy Q4 closing activity.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- MAY -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[75%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">MAY</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">May Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹4,50,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">21.0%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Promotional campaigns boosted mid-quarter sales.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- JUN (PEAK) -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-emerald-500 dark:bg-emerald-600 rounded-t-lg h-[95%] transition-all shadow-lg relative ring-2 ring-emerald/20"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-emerald-400">JUN</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">June Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹6,00,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">25.4%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Peak month due to large enterprise deals.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-emerald-400/40 border-l border-dashed border-emerald-400 mt-1"></div>
+        </div>
+    </div>
+
+    <!-- JUL -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[85%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">JUL</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">July Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹5,20,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">22.8%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Monsoon season impact with post-budget procurement demand.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- AUG (standardized) -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[70%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">AUG</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">August Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹4.80L</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">19.5%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Steady growth due to Independence Day sales</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- SEP -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[70%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">SEP</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">September Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹4,80,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">19.2%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Post-monsoon recovery with festive season demand beginning in metros.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- OCT -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[82%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">OCT</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">October Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹5,10,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">22.0%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Strong festive season sales with Diwali and Dussehra driving volume.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- NOV -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[78%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">NOV</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">November Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹4,95,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">21.5%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Black Friday and holiday shopping boost with early year-end planning.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <!-- DEC -->
+    <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
+        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[90%] transition-all"></div>
+        <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">DEC</div>
+        <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
+            <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
+                <div class="text-[10px] font-bold text-slate-400 uppercase mb-2">December Analysis</div>
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs">Revenue</span>
+                    <span class="text-sm font-semibold text-white">₹5,50,000</span>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs">Profit %</span>
+                    <span class="text-xs font-bold text-orange-400">23.8%</span>
+                </div>
+                <div class="mt-2 pt-2 border-t border-white/10">
+                    <p class="text-[10px] text-slate-300 leading-tight">Insight: Year-end holiday sales surge and inventory clearance for new year launch.</p>
+                </div>
+            </div>
+            <div class="h-full w-[1px] bg-primary/40 border-l border-dashed border-primary mt-1"></div>
+        </div>
+    </div>
+
+    <svg class="absolute inset-x-0 bottom-0 w-full h-full pointer-events-none px-4 pb-0" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <!-- Revenue dotted curve (primary color) based on actual monthly revenue data -->
+        <path fill="none" d="M5 81 C12 77,18 72,25 68 C32 65,38 70,45 75 C52 72,58 69,65 71 C72 48,78 5,85 73 C90 72,96 70,100 70" stroke="var(--primary-color)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke-dasharray="3 5" opacity="0.9" vector-effect="non-scaling-stroke"></path>
+        <!-- Profit smooth curve (cyan) -->
+        <path fill="none" d="M5 80 C12 78,18 66,25 60 C32 54,38 40,45 35 C52 30,58 50,65 55 C72 60,78 50,85 45 C90 40,96 30,100 20" stroke="var(--profit-line)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+    </svg>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark p-8 rounded-3xl premium-shadow border border-slate-100 dark:border-slate-800 flex flex-col h-full relative ui-hover">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-xl font-bold">India Market Insights</h2>
+<p class="text-sm text-slate-400 mt-1">Regional hub distribution</p>
+</div>
+<div class="flex items-center gap-3">
+<span class="bg-rose-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-rose-600 flex items-center gap-1 shadow-sm">
+<span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span> Live
+                        </span>
+</div>
+</div>
+<div class="flex-1 flex items-center justify-center relative py-4">
+<img alt="India Political Map" class="w-full max-h-[300px] object-contain opacity-20 dark:opacity-40 select-none pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACSFA7WRn1qrVT1AqP5EamJyMH1Tyo2jdrY-bG-g0W-fXvXfS8-NEI3SObzc5smIbm4UoOHrLmFY6AWxk0Oo212aucbFqu-mE7ZMqDRbVkwRmtzy7hlUcpeUCURjSJNLOzzDem_P6zts5a4K8V9MrWuzpqYNmymi2pjaLKc-Hh-rKnvMafk21rQmaQmb-UH7iFu4SdX8xXfzNYalhjP013Mu5watkhCNNN516FNp6b_3NJAXnM91ePDkMgmld6kol1ZJFcWLU0uUI"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="relative w-full h-full max-w-[320px] max-h-[320px]">
+<!-- Western India -->
+<div class="absolute top-[48%] left-[28%] group cursor-pointer">
+<div class="w-4 h-4 bg-primary rounded-full shadow-lg border-2 border-white flex items-center justify-center">
+<div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+</div>
+<div class="absolute left-1/2 -translate-x-1/2 bottom-6 bg-slate-900 text-white px-3 py-2 rounded-xl shadow-2xl text-[11px] whitespace-nowrap scale-0 group-hover:scale-100 transition-all origin-bottom font-bold z-20">
+Western India: ₹8.4L
+</div>
+</div>
+
+<!-- Southern India -->
+<div class="absolute top-[68%] left-[42%] group cursor-pointer">
+<div class="w-4 h-4 bg-emerald-500 rounded-full shadow-lg border-2 border-white flex items-center justify-center">
+<div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+</div>
+<div class="absolute left-1/2 -translate-x-1/2 bottom-6 bg-slate-900 text-white px-3 py-2 rounded-xl shadow-2xl text-[11px] whitespace-nowrap scale-0 group-hover:scale-100 transition-all origin-bottom font-bold z-20">
+Southern India: ₹6.2L
+</div>
+</div>
+
+<!-- Northern India (Delhi/NCR) -->
+<div class="absolute top-[25%] left-[35%] group cursor-pointer">
+<div class="w-4 h-4 bg-orange-500 rounded-full shadow-lg border-2 border-white flex items-center justify-center">
+<div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+</div>
+<div class="absolute left-1/2 -translate-x-1/2 bottom-6 bg-slate-900 text-white px-3 py-2 rounded-xl shadow-2xl text-[11px] whitespace-nowrap scale-0 group-hover:scale-100 transition-all origin-bottom font-bold z-20">
+Northern India: ₹5.8L
+</div>
+</div>
+
+<!-- North-Eastern India -->
+<div class="absolute top-[40%] left-[65%] group cursor-pointer">
+<div class="w-4 h-4 bg-cyan-500 rounded-full shadow-lg border-2 border-white flex items-center justify-center">
+<div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+</div>
+<div class="absolute left-1/2 -translate-x-1/2 bottom-6 bg-slate-900 text-white px-3 py-2 rounded-xl shadow-2xl text-[11px] whitespace-nowrap scale-0 group-hover:scale-100 transition-all origin-bottom font-bold z-20">
+North-East India: ₹3.1L
+</div>
+</div>
+
+<!-- Central India -->
+<div class="absolute top-[48%] left-[45%] group cursor-pointer">
+<div class="w-4 h-4 bg-yellow-500 rounded-full shadow-lg border-2 border-white flex items-center justify-center">
+<div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+</div>
+<div class="absolute left-1/2 -translate-x-1/2 bottom-6 bg-slate-900 text-white px-3 py-2 rounded-xl shadow-2xl text-[11px] whitespace-nowrap scale-0 group-hover:scale-100 transition-all origin-bottom font-bold z-20">
+Central India: ₹4.5L
+</div>
+</div>
+
+<!-- Eastern India -->
+<div class="absolute top-[55%] left-[48%] group cursor-pointer">
+<div class="w-4 h-4 bg-pink-500 rounded-full shadow-lg border-2 border-white flex items-center justify-center">
+<div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+</div>
+<div class="absolute left-1/2 -translate-x-1/2 bottom-6 bg-slate-900 text-white px-3 py-2 rounded-xl shadow-2xl text-[11px] whitespace-nowrap scale-0 group-hover:scale-100 transition-all origin-bottom font-bold z-20">
+Eastern India: ₹3.9L
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-auto">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-4 border border-slate-100 dark:border-slate-800/50 shadow-sm">
+<div class="w-12 h-12 bg-white dark:bg-slate-800 shadow-md rounded-xl flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-2xl">location_on</span>
+</div>
+<div>
+<div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Top Region</div>
+<div class="text-base font-bold text-slate-900 dark:text-white">Western India</div>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-4 border border-slate-100 dark:border-slate-800/50 shadow-sm">
+<div class="w-12 h-12 bg-white dark:bg-slate-800 shadow-md rounded-xl flex items-center justify-center text-emerald-500">
+<span class="material-symbols-outlined text-2xl">trending_up</span>
+</div>
+<div>
+<div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Growth</div>
+<div class="text-base font-bold text-slate-900 dark:text-white">High Urban</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark p-8 rounded-3xl premium-shadow border border-slate-100 dark:border-slate-800 flex flex-col h-full ui-hover">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-xl font-bold">Sales by Category</h2>
+<p class="text-sm text-slate-400 mt-1">Market distribution overview</p>
+</div>
+<span class="material-symbols-outlined text-slate-300">info</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center py-6">
+<div class="relative w-64 h-64 mb-10 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 drop-shadow-sm cursor-pointer" viewBox="0 0 100 100">
+<defs>
+<linearGradient id="grad-blue" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#5865f2" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#5865f2"></stop>
+</linearGradient>
+<linearGradient id="grad-green" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#2ca579" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#2ca579"></stop>
+</linearGradient>
+<linearGradient id="grad-orange" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#ff9f43" stop-opacity="0.8"></stop>
+<stop offset="100%" stop-color="#ff9f43"></stop>
+</linearGradient>
+</defs>
+<!-- Background circle -->
+<circle class="stroke-slate-100 dark:stroke-slate-800/30" cx="50" cy="50" fill="transparent" r="44" stroke-width="2.5"></circle>
+
+<!-- Electronics (50%) - Blue -->
+<circle class="donut-segment donut-electronics transition-all duration-300" cx="50" cy="50" fill="transparent" r="44" stroke="url(#grad-blue)" stroke-dasharray="138.2 276.4" stroke-linecap="round" stroke-width="2.5" stroke-opacity="0.8" onmouseenter="hoverCategory('electronics')" onmouseleave="resetCategory()" onclick="drillDownCategory('Electronics')"></circle>
+
+<!-- Furniture (30%) - Green -->
+<circle class="donut-segment donut-furniture transition-all duration-300" cx="50" cy="50" fill="transparent" r="44" stroke="url(#grad-green)" stroke-dasharray="82.9 276.4" stroke-dashoffset="-138.2" stroke-linecap="round" stroke-width="2.5" stroke-opacity="0.8" onmouseenter="hoverCategory('furniture')" onmouseleave="resetCategory()" onclick="drillDownCategory('Furniture')"></circle>
+
+<!-- Others (20%) - Orange -->
+<circle class="donut-segment donut-others transition-all duration-300" cx="50" cy="50" fill="transparent" r="44" stroke="url(#grad-orange)" stroke-dasharray="55.3 276.4" stroke-dashoffset="-221.1" stroke-linecap="round" stroke-width="2.5" stroke-opacity="0.8" onmouseenter="hoverCategory('others')" onmouseleave="resetCategory()" onclick="drillDownCategory('Others')"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<div class="text-4xl font-light tracking-tight text-slate-900 dark:text-white" id="centerValue">100%</div>
+<div class="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1" id="centerLabel">Total Sales</div>
+</div>
+</div>
+<div class="flex items-center justify-between w-full px-4 border-t border-slate-50 dark:border-slate-800 pt-8 mt-auto gap-2">
+<div class="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity" onmouseenter="hoverCategory('electronics')" onmouseleave="resetCategory()" onclick="drillDownCategory('Electronics')">
+<div class="w-2 h-2 rounded-full bg-chart-blue"></div>
+<span class="text-xs font-medium text-slate-500">Electronics</span>
+<span class="text-xs font-bold text-slate-900 dark:text-white ml-1">50%</span>
+</div>
+<div class="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity" onmouseenter="hoverCategory('furniture')" onmouseleave="resetCategory()" onclick="drillDownCategory('Furniture')">
+<div class="w-2 h-2 rounded-full bg-chart-green"></div>
+<span class="text-xs font-medium text-slate-500">Furniture</span>
+<span class="text-xs font-bold text-slate-900 dark:text-white ml-1">30%</span>
+</div>
+<div class="flex items-center gap-2 cursor-pointer hover:opacity-70 transition-opacity" onmouseenter="hoverCategory('others')" onmouseleave="resetCategory()" onclick="drillDownCategory('Others')">
+<div class="w-2 h-2 rounded-full bg-chart-orange"></div>
+<span class="text-xs font-medium text-slate-500">Others</span>
+<span class="text-xs font-bold text-slate-900 dark:text-white ml-1">20%</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-card-light dark:bg-card-dark p-8 rounded-3xl premium-shadow border border-slate-100 dark:border-slate-800 flex flex-col h-full ui-hover">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-xl font-bold">Segment Performance</h2>
+<p class="text-sm text-slate-400 mt-1">Contribution by business units</p>
+</div>
+<a class="text-primary text-xs font-bold hover:underline" href="#">View Analytics</a>
+</div>
+<div class="space-y-4">
+<div class="p-4 rounded-2xl border border-amber-100 dark:border-amber-900/30 bg-gradient-to-r from-amber-50/50 to-transparent dark:from-amber-900/10">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center text-indigo-600">
+<span class="material-symbols-outlined">cloud</span>
+</div>
+<div class="absolute -top-2 -right-2 bg-white dark:bg-slate-800 shadow-md rounded-full p-1 border border-amber-200">
+<span class="material-symbols-outlined text-amber-500 text-xs">emoji_events</span>
+</div>
+</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-white">Enterprise Cloud</div>
+<div class="text-[10px] text-slate-400 uppercase font-medium">Premium segment • Top Performer</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-sm font-bold text-slate-900 dark:text-white">₹14.2L</div>
+<div class="text-emerald-500 text-[10px] font-bold flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-sm">north</span> 22%
+                                </div>
+</div>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[70%]"></div>
+</div>
+</div>
+<div class="p-4 rounded-2xl border border-slate-50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/20 rounded-xl flex items-center justify-center text-amber-600">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-white">Consumer Retail</div>
+<div class="text-[10px] text-slate-400 uppercase font-medium">Mass market distribution</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-sm font-bold text-slate-900 dark:text-white">₹8.5L</div>
+<div class="text-rose-500 text-[10px] font-bold flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-sm">south</span> 2.4%
+                                </div>
+</div>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full w-[45%]"></div>
+</div>
+</div>
+<div class="p-4 rounded-2xl border border-slate-50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-purple-50 dark:bg-purple-900/20 rounded-xl flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined">devices</span>
+</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-white">Direct Online</div>
+<div class="text-[10px] text-slate-400 uppercase font-medium">Digital first outreach</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-sm font-bold text-slate-900 dark:text-white">₹4.1L</div>
+<div class="text-emerald-500 text-[10px] font-bold flex items-center justify-end gap-0.5">
+<span class="material-symbols-outlined text-sm">north</span> 15%
+                                </div>
+</div>
+</div>
+<div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-purple-500 rounded-full w-[25%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+<!-- Category Drill-Down Modal -->
+<div id="categoryDrillDownModal" class="fixed inset-0 bg-black/50 z-50 opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
+<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
+<div class="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6 flex items-center justify-between">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white" id="drillDownTitle">Category Deep Dive</h2>
+<button onclick="closeCategoryDrillDown()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+</div>
+
+<div class="p-6" id="drillDownContent">
+<!-- Content populated by JavaScript -->
+</div>
+
+<div class="sticky bottom-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 p-6 flex gap-3 justify-end">
+<button onclick="closeCategoryDrillDown()" class="px-6 py-2.5 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-medium hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Close</button>
+<button class="px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:opacity-90 transition-all">Export Category Report</button>
+</div>
+</div>
+</div>
+
+</main>
+
+<!-- Dashboard Customization Modal -->
+<div id="dashboardSettingsModal" class="fixed inset-0 bg-black/50 z-50 opacity-0 invisible transition-all duration-300 flex items-center justify-center p-4">
+<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-700">
+<div class="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6 flex items-center justify-between">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Personalize Your Dashboard</h2>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Choose which widgets to display and customize your layout</p>
+</div>
+<button onclick="closeDashboardSettings()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+</div>
+
+<div class="p-6 space-y-6">
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase mb-4 tracking-widest">KPI Cards</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<input type="checkbox" class="dashboardWidget" value="revenue" checked class="w-4 h-4 rounded">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Revenue</p>
+<p class="text-xs text-slate-500">Total revenue metric</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<input type="checkbox" class="dashboardWidget" value="markets" checked class="w-4 h-4 rounded">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Active Markets</p>
+<p class="text-xs text-slate-500">Geographic coverage</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<input type="checkbox" class="dashboardWidget" value="users" checked class="w-4 h-4 rounded">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Total Users</p>
+<p class="text-xs text-slate-500">User growth metrics</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<input type="checkbox" class="dashboardWidget" value="growth" checked class="w-4 h-4 rounded">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Growth Rate</p>
+<p class="text-xs text-slate-500">YoY growth percentage</p>
+</div>
+</label>
+</div>
+</div>
+
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase mb-4 tracking-widest">Charts &amp; Analysis</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<input type="checkbox" class="dashboardWidget" value="trend" checked class="w-4 h-4 rounded">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Revenue &amp; Profit Trend</p>
+<p class="text-xs text-slate-500">Monthly performance chart</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<input type="checkbox" class="dashboardWidget" value="insights" checked class="w-4 h-4 rounded">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Regional Insights</p>
+<p class="text-xs text-slate-500">India market analysis</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<input type="checkbox" class="dashboardWidget" value="category" checked class="w-4 h-4 rounded">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Sales by Category</p>
+<p class="text-xs text-slate-500">Product segment donut chart</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<input type="checkbox" class="dashboardWidget" value="segment" checked class="w-4 h-4 rounded">
+<div>
+<p class="font-semibold text-slate-900 dark:text-white">Segment Performance</p>
+<p class="text-xs text-slate-500">Business unit breakdown</p>
+</div>
+</label>
+</div>
+</div>
+
+<div class="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 p-4 rounded-xl border border-indigo-200 dark:border-indigo-800/50">
+<div class="flex gap-2 items-start">
+<span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400 mt-0.5">lightbulb</span>
+<p class="text-sm text-indigo-900 dark:text-indigo-300"><span class="font-semibold">Pro Tip:</span> Customize your dashboard to focus on metrics that matter most. Your preferences will be saved automatically.</p>
+</div>
+</div>
+</div>
+
+<div class="sticky bottom-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 p-6 flex gap-3 justify-end">
+<button onclick="closeDashboardSettings()" class="px-6 py-2.5 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-xl font-medium hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">Cancel</button>
+<button onclick="saveDashboardSettings()" class="px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:opacity-90 transition-all">Save Customization</button>
+</div>
+</div>
+</div>
+
+</main>
+
+<script>
+// AI Insights Panel Toggle
+function toggleAIInsights() {
+    const panel = document.getElementById('aiInsightsPanel');
+    const icon = document.getElementById('expandIcon');
+    const isExpanded = panel.style.maxHeight !== 'none' && panel.style.maxHeight !== '';
+    
+    if (isExpanded) {
+        panel.style.maxHeight = '0px';
+        icon.textContent = 'expand_less';
+    } else {
+        panel.style.maxHeight = '500px';
+        icon.textContent = 'expand_more';
+    }
+}
+
+// Time Range Selector
+document.querySelectorAll('.timeRangeBtn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.timeRangeBtn').forEach(b => {
+            b.classList.remove('bg-primary', 'text-white');
+            b.classList.add('bg-slate-200', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-300');
+        });
+        this.classList.remove('bg-slate-200', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-300');
+        this.classList.add('bg-primary', 'text-white');
+        
+        const range = this.dataset.range;
+        console.log('Selected time range:', range);
+        
+        // Here you could filter data based on the selected range
+        // For now, this is a visual update - API integration can be added later
+        if (range === 'custom') {
+            alert('Custom date picker would open here');
+        }
+    });
+});
+
+// Optional: Tooltip triggers for chart bars
+document.querySelectorAll('.chart-bar').forEach(bar => {
+    bar.addEventListener('mouseenter', function() {
+        const tooltip = this.querySelector('.tooltip-trigger');
+        if (tooltip) tooltip.style.opacity = '1';
+        if (tooltip) tooltip.style.visibility = 'visible';
+    });
+    bar.addEventListener('mouseleave', function() {
+        const tooltip = this.querySelector('.tooltip-trigger');
+        if (tooltip) tooltip.style.opacity = '0';
+        if (tooltip) tooltip.style.visibility = 'hidden';
+    });
+});
+
+// Export Functions
+function exportPDF() {
+    alert('📄 Generating PDF report...\nIn production: Using jsPDF + html2canvas libraries\nWould include: Charts, KPIs, Insights, Recommendations');
+    console.log('Export to PDF initiated');
+}
+
+function exportCSV() {
+    const csvData = 'Month,Revenue,Profit %\nJanuary,₹3,40,000,18.2%\nFebruary,₹4,20,000,20.5%\nMarch,₹5,85,200,24.1%\nApril,₹3,90,000,19.8%\nMay,₹4,50,000,21.0%\nJune,₹6,00,000,25.4%\nJuly,₹5,20,000,22.8%\nAugust,₹4,80,000,19.5%\nSeptember,₹4,80,000,19.2%\nOctober,₹5,10,000,22.0%\nNovember,₹4,95,000,21.5%\nDecember,₹5,50,000,23.8%';
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvData));
+    element.setAttribute('download', 'revenue_report.csv');
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    alert('✅ CSV file downloaded: revenue_report.csv');
+}
+
+function exportPNG() {
+    alert('🖼️ Exporting chart as PNG...\nIn production: Using html2canvas library\nWould capture: Revenue & Profit Trend chart');
+    console.log('Export to PNG initiated');
+}
+
+function exportWithAI() {
+    alert('✨ Exporting PDF with AI Summary...\nIncluding:\n- Revenue peaked in June (₹6L)\n- Festive months +18% average uplift\n- April dip anomaly detected\n- Recommendations for Q1');
+    console.log('Export with AI summary initiated');
+}
+
+// Filter Functions
+function filterByRegion(region) {
+    alert('🗺️ Filtering by Region: ' + region.toUpperCase() + '\n\nIn production: Would update all charts & KPIs');
+    console.log('Filtered by region:', region);
+}
+
+function filterByCategory(category) {
+    alert('📦 Filtering by Category: ' + category.toUpperCase() + '\n\nIn production: Would recalculate metrics for ' + category);
+    console.log('Filtered by category:', category);
+}
+
+function filterBySegment(segment) {
+    alert('💼 Filtering by Segment: ' + segment.toUpperCase() + '\n\nIn production: Would show segment-specific analysis');
+    console.log('Filtered by segment:', segment);
+}
+
+function resetFilters() {
+    alert('♻️ All filters reset!\n\nShowing complete dashboard data');
+    console.log('Filters reset');
+}
+
+// Drill-Down Modal Functions (Placeholder)
+function drillDownMonth(month) {
+    alert('📊 Opening detailed breakdown for ' + month + '...\n\nIn production: Modal would show:\n- Daily revenue data\n- Top 10 clients\n- Product category breakdown\n- Regional contribution');
+    console.log('Drill-down for month:', month);
+}
+
+// Add click handlers to month bars for drill-down
+document.querySelectorAll('.chart-bar').forEach((bar, index) => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    bar.style.cursor = 'pointer';
+    bar.addEventListener('click', function(e) {
+        if (!e.target.closest('.tooltip-trigger')) {
+            drillDownMonth(months[index]);
+        }
+    });
+});
+
+// Explain Chart Function
+function explainChart() {
+    const explanation = `
+📊 REVENUE & PROFIT TREND ANALYSIS
+
+Why does the pattern look like this?
+
+1. JUNE PEAK (₹6L - 95% bar height)
+   → Enterprise deals typically close at Q2-end
+   → Tax planning season in India creates procurement surge
+   → Large clients finalize budgets before fiscal year-end
+
+2. FESTIVE UPLIFT (Oct-Dec: ₹5-5.5L range)
+   → Diwali season (Oct-Nov) drives retail & corporate gifting
+   → Year-end holiday shopping and parties
+   → Inventory clearance before New Year
+
+3. APRIL ANOMALY (₹3.9L - 80% bar, then drops)
+   → Post-Q4 inventory clearance (seasonal dip)
+   → Businesses cut spending after year-end splurge
+   → Summer slowdown in many sectors
+
+4. PROFIT LINE (Orange curve)
+   → Starts high (20%+) but declines through July
+   → Dips in Feb-Mar due to festive season competition
+   → Recovers in Oct-Nov when margins improve
+
+📈 INSIGHT: Revenue peaks align with Indian fiscal/festive calendars, not just business demand.
+    `;
+    alert(explanation);
+}
+
+// Comparison Mode Toggle
+let comparisonMode = false;
+function toggleComparison() {
+    comparisonMode = !comparisonMode;
+    const btn = document.getElementById('comparisonBtn');
+    
+    if (comparisonMode) {
+        btn.classList.remove('bg-slate-200', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-300');
+        btn.classList.add('bg-primary', 'text-white');
+        alert('🔄 Comparison Mode ON\n\nNow showing: This Year vs Last Year\n- Solid lines = Current Year\n- Dotted lines = Last Year\n\nIn production: Would overlay previous year data for side-by-side comparison');
+    } else {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('bg-slate-200', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-300');
+        alert('🔄 Comparison Mode OFF\n\nShowing current year data only');
+    }
+    console.log('Comparison mode:', comparisonMode);
+}
+
+// Dashboard Customization Functions
+function openDashboardSettings() {
+    const modal = document.getElementById('dashboardSettingsModal');
+    modal.style.opacity = '1';
+    modal.style.visibility = 'visible';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDashboardSettings() {
+    const modal = document.getElementById('dashboardSettingsModal');
+    modal.style.opacity = '0';
+    modal.style.visibility = 'hidden';
+    document.body.style.overflow = 'auto';
+}
+
+function saveDashboardSettings() {
+    const selectedWidgets = Array.from(document.querySelectorAll('.dashboardWidget:checked')).map(cb => cb.value);
+    alert('✅ Dashboard customization saved!\n\nActive widgets:\n' + selectedWidgets.join(', ') + '\n\nIn production:\n- Would persist to localStorage\n- Apply show/hide CSS classes\n- Drag-and-drop reordering available');
+    console.log('Saved widgets:', selectedWidgets);
+    closeDashboardSettings();
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('dashboardSettingsModal');
+    if (modal && e.target === modal) {
+        closeDashboardSettings();
+    }
+});
+
+// Donut Chart Hover Effects
+const categoryData = {
+    electronics: { name: 'Electronics', value: '₹13.4L', percent: '50%', growth: '+18%' },
+    furniture: { name: 'Furniture', value: '₹8.0L', percent: '30%', growth: '+12%' },
+    others: { name: 'Others', value: '₹5.3L', percent: '20%', growth: '+8%' }
+};
+
+function hoverCategory(category) {
+    const data = categoryData[category];
+    
+    // Update center text
+    document.getElementById('centerValue').textContent = data.value;
+    document.getElementById('centerLabel').textContent = data.name + ' (' + data.percent + ')';
+    
+    // Fade other segments
+    document.querySelectorAll('.donut-segment').forEach(segment => {
+        segment.style.strokeOpacity = '0.2';
+        segment.style.strokeWidth = '2.5';
+    });
+    
+    // Highlight hovered segment
+    document.querySelector('.donut-' + category).style.strokeOpacity = '1';
+    document.querySelector('.donut-' + category).style.strokeWidth = '3.5';
+    document.querySelector('.donut-' + category).style.filter = 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.3))';
+}
+
+function resetCategory() {
+    document.getElementById('centerValue').textContent = '100%';
+    document.getElementById('centerLabel').textContent = 'Total Sales';
+    
+    // Reset all segments
+    document.querySelectorAll('.donut-segment').forEach(segment => {
+        segment.style.strokeOpacity = '0.8';
+        segment.style.strokeWidth = '2.5';
+        segment.style.filter = 'none';
+    });
+}
+
+// Drill-down modal
+function drillDownCategory(categoryName) {
+    const modal = document.getElementById('categoryDrillDownModal');
+    modal.style.opacity = '1';
+    modal.style.visibility = 'visible';
+    
+    // Update modal content based on selected category
+    document.getElementById('drillDownTitle').textContent = categoryName + ' Deep Dive';
+    
+    if (categoryName === 'Electronics') {
+        document.getElementById('drillDownContent').innerHTML = `
+            <div class="space-y-4">
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-slate-900 dark:text-white mb-3">📱 Top Products</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Smartphones</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹6.2L</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Laptops</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹4.1L</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Accessories</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹3.1L</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-slate-900 dark:text-white mb-3">📈 Monthly Breakdown</p>
+                    <div class="space-y-1 text-sm">
+                        <div class="flex justify-between">
+                            <span>Jan-Mar</span>
+                            <span class="font-bold">₹3.2L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Apr-Jun</span>
+                            <span class="font-bold">₹4.1L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Jul-Sep</span>
+                            <span class="font-bold">₹3.5L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Oct-Dec</span>
+                            <span class="font-bold">₹2.6L</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p class="text-sm font-bold text-blue-900 dark:text-blue-300 mb-2">💡 Growth Trend</p>
+                    <p class="text-sm text-blue-800 dark:text-blue-200">Electronics segment shows +18% growth with strong momentum in Q2-Q3. Smartphones lead with 46% of segment revenue.</p>
+                </div>
+            </div>
+        `;
+    } else if (categoryName === 'Furniture') {
+        document.getElementById('drillDownContent').innerHTML = `
+            <div class="space-y-4">
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-slate-900 dark:text-white mb-3">🛋️ Top Products</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Office Chairs</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹3.5L</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Desks</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹2.8L</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Cabinets</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹1.7L</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-slate-900 dark:text-white mb-3">📈 Monthly Breakdown</p>
+                    <div class="space-y-1 text-sm">
+                        <div class="flex justify-between">
+                            <span>Jan-Mar</span>
+                            <span class="font-bold">₹1.8L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Apr-Jun</span>
+                            <span class="font-bold">₹2.2L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Jul-Sep</span>
+                            <span class="font-bold">₹2.1L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Oct-Dec</span>
+                            <span class="font-bold">₹1.9L</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+                    <p class="text-sm font-bold text-green-900 dark:text-green-300 mb-2">💡 Growth Trend</p>
+                    <p class="text-sm text-green-800 dark:text-green-200">Furniture shows steady +12% growth. Office segment (chairs & desks) accounts for 76% of category revenue. Strong Q2 performance.</p>
+                </div>
+            </div>
+        `;
+    } else {
+        document.getElementById('drillDownContent').innerHTML = `
+            <div class="space-y-4">
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-slate-900 dark:text-white mb-3">📦 Top Products</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Home Appliances</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹2.1L</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Smart Devices</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹2.0L</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 dark:text-slate-300">Misc Items</span>
+                            <span class="font-bold text-slate-900 dark:text-white">₹1.2L</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg">
+                    <p class="text-sm font-bold text-slate-900 dark:text-white mb-3">📈 Monthly Breakdown</p>
+                    <div class="space-y-1 text-sm">
+                        <div class="flex justify-between">
+                            <span>Jan-Mar</span>
+                            <span class="font-bold">₹1.2L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Apr-Jun</span>
+                            <span class="font-bold">₹1.4L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Jul-Sep</span>
+                            <span class="font-bold">₹1.3L</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Oct-Dec</span>
+                            <span class="font-bold">₹1.4L</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg border border-orange-200 dark:border-orange-800">
+                    <p class="text-sm font-bold text-orange-900 dark:text-orange-300 mb-2">💡 Growth Trend</p>
+                    <p class="text-sm text-orange-800 dark:text-orange-200">Others category shows +8% growth. Diverse product mix with balanced quarterly revenue. Growing smart device segment.</p>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function closeCategoryDrillDown() {
+    const modal = document.getElementById('categoryDrillDownModal');
+    modal.style.opacity = '0';
+    modal.style.visibility = 'hidden';
+}
+
+// Sidebar collapse toggle
+const SIDEBAR_AUTO_COLLAPSE_BREAKPOINT = 1024;
+
+function updateSidebarToggleButton() {
+    const toggleBtn = document.getElementById('sidebarRailToggle');
+    const toggleIcon = document.getElementById('sidebarRailToggleIcon');
+    const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+    if (!toggleBtn || !toggleIcon) return;
+
+    toggleIcon.textContent = isCollapsed ? 'chevron_right' : 'chevron_left';
+    toggleBtn.setAttribute('aria-label', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+}
+
+function syncSidebarForScreenSize() {
+    if (window.innerWidth < SIDEBAR_AUTO_COLLAPSE_BREAKPOINT) {
+        document.body.classList.add('sidebar-collapsed');
+    } else {
+        document.body.classList.remove('sidebar-collapsed');
+    }
+    updateSidebarToggleButton();
+}
+
+function toggleSidebar() {
+    document.body.classList.toggle('sidebar-collapsed');
+    updateSidebarToggleButton();
+}
+
+syncSidebarForScreenSize();
+window.addEventListener('resize', syncSidebarForScreenSize);
+
+// Close drill-down modal when clicking outside
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('categoryDrillDownModal');
+    if (modal && e.target === modal) {
+        closeCategoryDrillDown();
+    }
+});
+
+</script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body></html>
+
