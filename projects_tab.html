@@ -1,172 +1,179 @@
 <!DOCTYPE html>
-
-<html lang="en"><head>
+<html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>EasyViz - My Projects</title>
-<!-- Tailwind CSS v3 CDN -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Google Fonts: Inter and Material Symbols -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              primary: '#3F51B5', // Vibrant Blue
-              secondary: '#1A202C',
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3f51b5",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1e293b",
+                        "chart-blue": "#5865f2",
+                        "chart-green": "#2ca579",
+                        "chart-orange": "#ff9f43",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                    },
+                },
             },
-          },
-        },
-      },
-    }
-  </script>
-<style data-purpose="custom-layout">
-    body {
-      background-color: #F8FAFC;
-    }
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
-    .active-nav-item {
-      color: #3F51B5;
-      background-color: #E8EAF6;
-      border-right: 4px solid #3F51B5;
-    }
-    /* Custom shadow for the 'Create' button as seen in screenshot */
-    .btn-create-shadow {
-      box-shadow: 0 4px 14px 0 rgba(63, 81, 181, 0.39);
-    }
-  
-    /* Sidebar Collapse Styles */
-    .sidebar-transition {
-      transition: width 0.3s ease-in-out, margin 0.3s ease-in-out, padding 0.3s ease-in-out;
-    }
-    body.sidebar-collapsed aside[data-purpose='sidebar'] {
-      width: 80px;
-    }
-    body.sidebar-collapsed aside[data-purpose='sidebar'] .font-medium,
-    body.sidebar-collapsed aside[data-purpose='sidebar'] .text-2xl span:not(.material-symbols-outlined),
-    body.sidebar-collapsed aside[data-purpose='sidebar'] button span:not(.material-symbols-outlined),
-    body.sidebar-collapsed aside[data-purpose='sidebar'] .uppercase {
-      display: none;
-    }
-    body.sidebar-collapsed aside[data-purpose='sidebar'] .p-6, 
-    body.sidebar-collapsed aside[data-purpose='sidebar'] .px-4 {
-      padding-left: 1rem;
-      padding-right: 1rem;
-      justify-content: center;
-    }
-    body.sidebar-collapsed aside[data-purpose='sidebar'] .flex-col {
-      align-items: center;
-    }
-    body.sidebar-collapsed aside[data-purpose='sidebar'] nav a,
-    body.sidebar-collapsed aside[data-purpose='sidebar'] nav div {
-        justify-content: center;
-    }
-    .sidebar-toggle-btn {
-      position: absolute;
-      right: -12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      background: white;
-      border: 1px solid #E2E8F0;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 50;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      color: #64748B;
-    }
-    body.sidebar-collapsed .sidebar-toggle-btn span {
-      transform: rotate(180deg);
-    }
-  </style>
+        };
+    </script>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #3f51b5;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .donut-segment { transition: all 0.3s ease; }
+        .chart-bar { transition: height 0.6s ease-out; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .premium-shadow {
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+        /* UI hover lift + shadow for interactive elements */
+        .ui-hover, aside a, aside button, header button, main button, .chart-bar, .tooltip-trigger > div, .card {
+            transition: transform 180ms ease, box-shadow 180ms ease;
+        }
+        .ui-hover:hover, aside a:hover, aside button:hover, header button:hover, main button:hover, .chart-bar:hover, .tooltip-trigger > div:hover, .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.08);
+        }
+        /* Keep sidebar rail toggle fully static on hover */
+        #sidebarRailToggle,
+        #sidebarRailToggle:hover {
+            transform: none !important;
+            box-shadow: none !important;
+            transition: none !important;
+        }
+        .soft-gradient-blue { fill: url(#grad-blue); }
+        .soft-gradient-green { fill: url(#grad-green); }
+        .soft-gradient-orange { fill: url(#grad-orange); }
+        .chart-bar-hover:hover .tooltip-trigger {
+            opacity: 1;
+            visibility: visible;
+        }
+        /* Sidebar collapse state */
+        aside, main { transition: all 220ms ease; }
+        body.sidebar-collapsed aside { width: 5rem; }
+        body.sidebar-collapsed main { margin-left: 5rem; }
+        body.sidebar-collapsed aside nav h3,
+        body.sidebar-collapsed aside nav a span:last-child,
+        body.sidebar-collapsed aside nav button span:last-child,
+        body.sidebar-collapsed aside > div:first-child > span:last-child,
+        body.sidebar-collapsed aside > div:last-child a span:last-child,
+        body.sidebar-collapsed aside > div:last-child button span:last-child,
+        body.sidebar-collapsed aside > div:last-child .flex.items-center.justify-between > div > span:last-child {
+            display: none;
+        }
+        body.sidebar-collapsed aside nav a,
+        body.sidebar-collapsed aside nav button,
+        body.sidebar-collapsed aside > div:last-child a,
+        body.sidebar-collapsed aside > div:last-child > button:first-child {
+            justify-content: center;
+        }
+        /* Active navigation link styling */
+        .nav-link.active {
+            background-color: var(--slate-100);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .dark .nav-link.active {
+            background-color: var(--slate-800);
+            color: var(--primary-color);
+        }
+    </style>
 </head>
-<body class="flex min-h-screen">
-<!-- BEGIN: Sidebar -->
-<aside class="w-64 bg-white border-r border-gray-200 hidden lg:flex flex-col sticky top-0 h-screen sidebar-transition" data-purpose="sidebar" id="main-sidebar"><button aria-label="Toggle Sidebar" class="sidebar-toggle-btn" id="sidebar-toggle"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
-<div class="p-6">
-<div class="flex items-center gap-2 text-brand-primary font-bold text-2xl">
-<span class="material-symbols-outlined text-3xl">analytics</span>
-<span>EasyViz</span>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+<aside id="sidebar" class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col fixed h-full z-20">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">analytics</span>
 </div>
+<span class="text-xl font-bold tracking-tight">EasyViz</span>
 </div>
-<div class="px-4 mb-6">
-<button class="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition-all font-semibold">
-<span class="material-symbols-outlined">auto_awesome</span>
+<button id="sidebarRailToggle" aria-label="Collapse sidebar" onclick="toggleSidebar()" class="absolute top-[44%] -translate-y-1/2 left-full w-6 h-16 rounded-r-full rounded-l-none border border-l-0 border-slate-200/80 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400 shadow-none flex items-center justify-center z-30">
+<span id="sidebarRailToggleIcon" class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<nav class="flex-1 px-4 py-4 space-y-6 overflow-y-auto">
+<button class="w-full flex items-center gap-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-xl font-semibold border border-indigo-100 dark:border-indigo-800 transition-all ui-hover">
+<span class="material-symbols-outlined text-indigo-500">auto_awesome</span>
 <span>Ask Yua AI</span>
 </button>
-</div>
-<nav class="flex-1 px-4 space-y-1 overflow-y-auto">
-<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" href="#" onclick="window.location.href='Dashboard/dashboard-final.html'; return false;">
+<div class="space-y-1">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="dashboard" onclick="window.location.href='Dashboard/dashboard-final.html'; return false;">
 <span class="material-symbols-outlined">dashboard</span>
-<span class="font-medium">Dashboard</span>
+<span>Dashboard</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="sources">
 <span class="material-symbols-outlined">database</span>
-<span class="font-medium">Data Sources</span>
+<span>Data Sources</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" href="#">
-<span class="material-symbols-outlined">favorite</span>
-<span class="font-medium">Favorites</span>
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="favorites">
+<span class="material-symbols-outlined">star</span>
+<span>Favorites</span>
 </a>
-<div class="pt-8 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-        MY DATA
-      </div>
-<a class="flex items-center gap-3 px-4 py-3 active-nav-item rounded-lg transition-colors" href="#">
-<span class="material-symbols-outlined">folder</span>
-<span class="font-medium">My Projects</span>
+</div>
+<div class="space-y-1">
+<h3 class="px-3 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">MY DATA</h3>
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="projects">
+<span class="material-symbols-outlined">folder_open</span>
+<span>My Project</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" href="#">
-<span class="material-symbols-outlined">dataset</span>
-<span class="font-medium">Datasets</span>
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="datasets">
+<span class="material-symbols-outlined">table_chart</span>
+<span>Datasets</span>
 </a>
-<div class="pt-8 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-        ANALYSIS
-      </div>
-<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+</div>
+<div class="space-y-1">
+<h3 class="px-3 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">ANALYSIS</h3>
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="analytics">
 <span class="material-symbols-outlined">insights</span>
-<span class="font-medium">Advanced Analytics</span>
+<span>Advanced Analytics</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#" data-page="reports">
 <span class="material-symbols-outlined">description</span>
-<span class="font-medium">Reports</span>
+<span>Reports</span>
 </a>
+</div>
 </nav>
-<div class="p-4 border-t border-gray-100">
-<a class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg" href="#">
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-2">
+<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
 <span class="material-symbols-outlined">settings</span>
-<span class="font-medium">Settings</span>
+<span>Settings</span>
 </a>
 </div>
 </aside>
-<!-- END: Sidebar -->
-<!-- BEGIN: Main Content Container -->
-<div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-<!-- BEGIN: Sticky Header -->
+<main id="mainContent" class="ml-64 flex-1 flex flex-col min-w-0">
 <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-30" data-purpose="main-header">
 <div class="flex items-center flex-1 max-w-xl">
 <div class="relative w-full">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-<input class="w-full pl-10 pr-4 py-2 bg-gray-50 border-gray-200 rounded-full text-sm focus:ring-brand-primary focus:border-brand-primary" placeholder="Search projects..." type="text"/>
+<input class="w-full pl-10 pr-4 py-2 bg-gray-50 border-gray-200 rounded-full text-sm focus:ring-primary focus:border-primary" placeholder="Search projects..." type="text"/>
 </div>
 </div>
 <div class="flex items-center gap-4 ml-4">
-<button class="flex items-center gap-2 bg-brand-primary text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-blue-700">
+<button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-700">
 <span class="material-symbols-outlined text-lg">upload_file</span>
 <span>Import Data</span>
 </button>
-<button class="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+<button class="p-2 text-gray-500 hover:bg-gray-100 rounded-full" onclick="toggleDarkMode()">
 <span class="material-symbols-outlined">dark_mode</span>
 </button>
 <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-full relative">
@@ -174,37 +181,35 @@
 <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
 </button>
 <div class="h-8 w-8 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-700 font-bold text-xs cursor-pointer">
-          JD
-        </div>
+JD
+</div>
 </div>
 </header>
-<!-- END: Sticky Header -->
-<!-- BEGIN: Project Dashboard Content -->
 <main class="flex-1 overflow-y-auto p-8" data-purpose="projects-content">
 <!-- Header Actions -->
 <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
 <h1 class="text-2xl font-bold text-gray-900">My Projects</h1>
-<button class="flex items-center justify-center gap-2 bg-brand-primary text-white px-8 py-3 rounded-xl font-bold btn-create-shadow transition-all transform hover:-translate-y-0.5 hover:bg-blue-700" data-purpose="create-project-btn">
+<button class="flex items-center justify-center gap-2 bg-primary text-white px-8 py-3 rounded-xl font-bold transition-all transform hover:-translate-y-0.5 hover:bg-indigo-700" data-purpose="create-project-btn">
 <span class="material-symbols-outlined">add_circle</span>
-          Create New Project
-        </button>
+Create New Project
+</button>
 </div>
 <!-- Filters & Search Section -->
 <div class="bg-white p-4 rounded-2xl border border-gray-200 mb-8 space-y-4 shadow-sm" data-purpose="filters-container">
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-<input class="w-full pl-12 pr-4 py-3 border-gray-100 bg-white rounded-xl text-sm focus:ring-brand-primary focus:border-brand-primary" placeholder="Search projects..." type="text"/>
+<input class="w-full pl-12 pr-4 py-3 border-gray-100 bg-white rounded-xl text-sm focus:ring-primary focus:border-primary" placeholder="Search projects..." type="text"/>
 </div>
 <div class="flex flex-wrap items-center justify-between gap-4">
 <div class="flex gap-2 p-1 bg-gray-50 rounded-xl">
-<button class="px-6 py-2 rounded-lg bg-brand-primary text-white text-sm font-semibold shadow-sm">All Projects</button>
+<button class="px-6 py-2 rounded-lg bg-primary text-white text-sm font-semibold shadow-sm">All Projects</button>
 <button class="px-6 py-2 rounded-lg text-gray-600 text-sm font-medium hover:bg-gray-100">Recent</button>
 <button class="px-6 py-2 rounded-lg text-gray-600 text-sm font-medium hover:bg-gray-100">Shared</button>
 <button class="px-6 py-2 rounded-lg text-gray-600 text-sm font-medium hover:bg-gray-100">Drafts</button>
 </div>
-<button class="flex items-center gap-2 text-brand-primary font-semibold text-sm">
-            Sort by Name
-            <span class="material-symbols-outlined text-lg">unfold_more</span>
+<button class="flex items-center gap-2 text-primary font-semibold text-sm">
+Sort by Name
+<span class="material-symbols-outlined text-lg">unfold_more</span>
 </button>
 </div>
 </div>
@@ -218,10 +223,10 @@
 <div class="h-36 bg-orange-50 relative flex items-center justify-center p-4">
 <span class="absolute top-2 right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Published</span>
 <div class="flex items-end gap-1">
-<div class="w-2 h-6 bg-brand-primary rounded-sm opacity-40"></div>
-<div class="w-2 h-10 bg-brand-primary rounded-sm opacity-70"></div>
-<div class="w-2 h-8 bg-brand-primary rounded-sm opacity-50"></div>
-<div class="w-2 h-4 bg-brand-primary rounded-sm opacity-30"></div>
+<div class="w-2 h-6 bg-primary rounded-sm opacity-40"></div>
+<div class="w-2 h-10 bg-primary rounded-sm opacity-70"></div>
+<div class="w-2 h-8 bg-primary rounded-sm opacity-50"></div>
+<div class="w-2 h-4 bg-primary rounded-sm opacity-30"></div>
 </div>
 </div>
 <div class="p-4">
@@ -251,7 +256,7 @@
 <!-- Project Card 3: Ad Spend -->
 <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
 <div class="h-36 bg-amber-50 relative flex items-center justify-center p-4">
-<span class="absolute top-2 right-2 bg-brand-primary text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Shared</span>
+<span class="absolute top-2 right-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Shared</span>
 <span class="material-symbols-outlined text-4xl text-amber-400">pie_chart</span>
 </div>
 <div class="p-4">
@@ -292,7 +297,7 @@
 <span class="material-symbols-outlined">dashboard</span>
 <span class="text-[10px] font-bold uppercase">Dashboard</span>
 </button>
-<button class="flex flex-col items-center text-brand-primary" style="color: #3F51B5;">
+<button class="flex flex-col items-center text-primary" style="color: #3f51b5;">
 <span class="material-symbols-outlined">folder</span>
 <span class="text-[10px] font-bold uppercase">Projects</span>
 </button>
@@ -306,16 +311,9 @@
 </button>
 </nav>
 <!-- END: Mobile Footer Navigation -->
-</div>
-<!-- END: Main Content Container -->
-<script>
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const body = document.body;
-    
-    sidebarToggle.addEventListener('click', () => {
-      body.classList.toggle('sidebar-collapsed');
-    });
-  </script><div class="fixed inset-0 z-50 hidden" id="create-project-modal">
+</main>
+</main>
+<div class="fixed inset-0 z-50 hidden" id="create-project-modal">
 <!-- Backdrop -->
 <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm"></div>
 <!-- Modal Content -->
@@ -330,18 +328,18 @@
 <div class="p-6 space-y-4">
 <p class="text-sm text-gray-500 mb-6">Choose how you want to start your new project.</p>
 <!-- Option 1 -->
-<button class="w-full flex items-center gap-4 p-4 border border-gray-100 rounded-2xl hover:border-brand-primary hover:bg-indigo-50/50 transition-all text-left group">
-<div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-brand-primary">
+<button class="w-full flex items-center gap-4 p-4 border border-gray-100 rounded-2xl hover:border-primary hover:bg-indigo-50/50 transition-all text-left group">
+<div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-primary">
 <span class="material-symbols-outlined">upload_file</span>
 </div>
 <div class="flex-1">
 <div class="font-bold text-gray-900">Upload Spreadsheet / Excel</div>
 <div class="text-xs text-gray-500">Import CSV, XLSX or JSON files directly</div>
 </div>
-<span class="material-symbols-outlined text-gray-300 group-hover:text-brand-primary transition-colors">chevron_right</span>
+<span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">chevron_right</span>
 </button>
 <!-- Option 2 -->
-<button class="w-full flex items-center gap-4 p-4 border border-gray-100 rounded-2xl hover:border-brand-primary hover:bg-indigo-50/50 transition-all text-left group">
+<button class="w-full flex items-center gap-4 p-4 border border-gray-100 rounded-2xl hover:border-primary hover:bg-indigo-50/50 transition-all text-left group">
 <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
 <span class="material-symbols-outlined">database</span>
 </div>
@@ -349,7 +347,7 @@
 <div class="font-bold text-gray-900">Connect Database</div>
 <div class="text-xs text-gray-500">Connect to SQL, NoSQL or Cloud warehouses</div>
 </div>
-<span class="material-symbols-outlined text-gray-300 group-hover:text-brand-primary transition-colors">chevron_right</span>
+<span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">chevron_right</span>
 </button>
 </div>
 <div class="p-6 border-t border-gray-100 flex justify-end">
@@ -357,28 +355,91 @@
 </div>
 </div>
 </div>
-</div><script>
-  const createBtn = document.querySelector('[data-purpose="create-project-btn"]');
-  const modal = document.getElementById('create-project-modal');
-  const closeModalX = document.getElementById('close-modal-x');
-  const cancelBtn = document.getElementById('cancel-modal-btn');
+</div>
+<script>
+function toggleSidebar() {
+  document.body.classList.toggle('sidebar-collapsed');
+  const icon = document.getElementById('sidebarRailToggleIcon');
+  if (document.body.classList.contains('sidebar-collapsed')) {
+    icon.textContent = 'chevron_right';
+  } else {
+    icon.textContent = 'chevron_left';
+  }
+}
 
-  const openModal = () => {
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-  };
+// Dark mode toggle with localStorage persistence
+function toggleDarkMode() {
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    // Save preference to localStorage
+    if (html.classList.contains('dark')) {
+        localStorage.setItem('darkMode', 'true');
+    } else {
+        localStorage.setItem('darkMode', 'false');
+    }
+}
 
-  const closeModal = () => {
-    modal.classList.add('hidden');
-    document.body.style.overflow = '';
-  };
+// Initialize dark mode from localStorage on page load
+function initializeDarkMode() {
+    const darkModeSetting = localStorage.getItem('darkMode');
+    if (darkModeSetting === 'true') {
+        document.documentElement.classList.add('dark');
+    } else if (darkModeSetting === 'false') {
+        document.documentElement.classList.remove('dark');
+    }
+}
 
-  createBtn.addEventListener('click', openModal);
-  closeModalX.addEventListener('click', closeModal);
-  cancelBtn.addEventListener('click', closeModal);
+// Call initialization on page load
+document.addEventListener('DOMContentLoaded', initializeDarkMode);
+initializeDarkMode();
 
-  // Close on backdrop click
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal.firstElementChild) closeModal();
+// Set active navigation link based on current page
+function setActiveNavLink() {
+  const currentPage = window.location.pathname;
+  const navLinks = document.querySelectorAll('.nav-link');
+  let activePage = 'projects'; // default
+  
+  if (currentPage.includes('dashboard-final.html')) {
+    activePage = 'dashboard';
+  } else if (currentPage.includes('projects_tab.html')) {
+    activePage = 'projects';
+  }
+  
+  navLinks.forEach(link => {
+    link.classList.remove('active', 'bg-slate-100', 'dark:bg-slate-800', 'text-primary', 'font-semibold');
+    if (link.getAttribute('data-page') === activePage) {
+      link.classList.add('active', 'bg-slate-100', 'dark:bg-slate-800', 'text-primary', 'font-semibold');
+    }
   });
-</script></body></html>
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', setActiveNavLink);
+setActiveNavLink();
+
+const createBtn = document.querySelector('[data-purpose="create-project-btn"]');
+const modal = document.getElementById('create-project-modal');
+const closeModalX = document.getElementById('close-modal-x');
+const cancelBtn = document.getElementById('cancel-modal-btn');
+
+const openModal = () => {
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+};
+
+const closeModal = () => {
+  modal.classList.add('hidden');
+  document.body.style.overflow = '';
+};
+
+createBtn.addEventListener('click', openModal);
+closeModalX.addEventListener('click', closeModal);
+cancelBtn.addEventListener('click', closeModal);
+
+// Close on backdrop click
+modal.addEventListener('click', (e) => {
+  if (e.target === modal.firstElementChild) closeModal();
+});
+</script>
+</body>
+</html>

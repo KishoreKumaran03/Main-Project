@@ -88,6 +88,16 @@
         body.sidebar-collapsed aside > div:last-child > button:first-child {
             justify-content: center;
         }
+        /* Active navigation link styling */
+        .nav-link.active {
+            background-color: var(--slate-100);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .dark .nav-link.active {
+            background-color: var(--slate-800);
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
@@ -107,37 +117,37 @@
 <span>Ask Yua AI</span>
 </button>
 <div class="space-y-1">
-<a class="flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-800 text-primary font-semibold rounded-xl ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-800 text-primary font-semibold rounded-xl ui-hover" href="#" data-page="dashboard">
 <span class="material-symbols-outlined">dashboard</span>
 <span>Dashboard</span>
 </a>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="sources">
 <span class="material-symbols-outlined">database</span>
 <span>Data Sources</span>
 </a>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="favorites">
 <span class="material-symbols-outlined">star</span>
 <span>Favorites</span>
 </a>
 </div>
 <div class="space-y-1">
 <h3 class="px-3 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">MY DATA</h3>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" onclick="window.location.href='../projects_tab.html'; return false;">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="projects" onclick="window.location.href='../projects_tab.html'; return false;">
 <span class="material-symbols-outlined">folder_open</span>
-<span>My Files</span>
+<span>My Project</span>
 </a>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="datasets">
 <span class="material-symbols-outlined">table_chart</span>
 <span>Datasets</span>
 </a>
 </div>
 <div class="space-y-1">
 <h3 class="px-3 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">ANALYSIS</h3>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="analytics">
 <span class="material-symbols-outlined">insights</span>
 <span>Advanced Analytics</span>
 </a>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#" data-page="reports">
 <span class="material-symbols-outlined">description</span>
 <span>Reports</span>
 </a>
@@ -163,7 +173,7 @@
 <div class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
 <span class="material-symbols-outlined text-base">light_mode</span>
 <span class="text-sm font-medium">Dark Mode</span>
-<button class="w-12 h-6 bg-slate-300 dark:bg-emerald-500 rounded-full relative transition-all shadow-sm cursor-pointer hover:shadow-md" onclick="document.documentElement.classList.toggle('dark')">
+<button class="w-12 h-6 bg-slate-300 dark:bg-emerald-500 rounded-full relative transition-all shadow-sm cursor-pointer hover:shadow-md" onclick="toggleDarkMode()">
 <div class="absolute top-0.5 left-0.5 dark:left-6 w-5 h-5 bg-white rounded-full transition-all shadow-md flex items-center justify-center">
 <span class="material-symbols-outlined text-xs text-slate-600 dark:text-emerald-600">light_mode</span>
 </div>
@@ -1491,6 +1501,58 @@ function toggleSidebar() {
     document.body.classList.toggle('sidebar-collapsed');
     updateSidebarToggleButton();
 }
+
+// Dark mode toggle with localStorage persistence
+function toggleDarkMode() {
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    // Save preference to localStorage
+    if (html.classList.contains('dark')) {
+        localStorage.setItem('darkMode', 'true');
+    } else {
+        localStorage.setItem('darkMode', 'false');
+    }
+}
+
+// Initialize dark mode from localStorage on page load
+function initializeDarkMode() {
+    const darkModeSetting = localStorage.getItem('darkMode');
+    if (darkModeSetting === 'true') {
+        document.documentElement.classList.add('dark');
+    } else if (darkModeSetting === 'false') {
+        document.documentElement.classList.remove('dark');
+    }
+}
+
+// Call initialization on page load
+document.addEventListener('DOMContentLoaded', initializeDarkMode);
+initializeDarkMode();
+
+// Set active navigation link based on current page
+function setActiveNavLink() {
+  const currentPage = window.location.pathname;
+  const navLinks = document.querySelectorAll('.nav-link');
+  let activePage = 'dashboard'; // default for dashboard
+  
+  if (currentPage.includes('dashboard-final.html')) {
+    activePage = 'dashboard';
+  } else if (currentPage.includes('projects_tab.html')) {
+    activePage = 'projects';
+  }
+  
+  navLinks.forEach(link => {
+    link.classList.remove('active', 'bg-slate-100', 'dark:bg-slate-800', 'text-primary', 'font-semibold');
+    if (link.getAttribute('data-page') === activePage) {
+      link.classList.add('active', 'bg-slate-100', 'dark:bg-slate-800', 'text-primary', 'font-semibold');
+    }
+  });
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', setActiveNavLink);
+
+// Also set active on page load
+setActiveNavLink();
 
 syncSidebarForScreenSize();
 window.addEventListener('resize', syncSidebarForScreenSize);
