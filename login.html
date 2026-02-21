@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Analytics Pro Login - Light Enhanced</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "primary-hover": "#1e293b",
+                        "text-main": "#0f172a",
+                        "text-muted": "#64748b",
+                        "input-border": "#cbd5e1",
+                        "bg-light": "#f8fafc",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    boxShadow: {
+                        "subtle": "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 7s ease-in-out infinite 1s',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'wave-1': 'wave 12s linear infinite',
+                        'wave-2': 'wave 18s linear infinite reverse',
+                        'wave-3': 'wave 15s linear infinite',
+                        'wave-4': 'wave 22s linear infinite reverse',
+                        'dash-fast': 'dash 10s linear infinite',
+                        'dash-medium': 'dash 15s linear infinite',
+                        'dash-slow': 'dash 25s linear infinite',
+                        'ping-fast': 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        wave: {
+                            '0%': { transform: 'translateX(0) translateZ(0) scaleY(1)' },
+                            '50%': { transform: 'translateX(-25%) translateZ(0) scaleY(1.1)' },
+                            '100%': { transform: 'translateX(-50%) translateZ(0) scaleY(1)' },
+                        },
+                        dash: {
+                            to: {
+                                strokeDashoffset: '-1000',
+                            },
+                        },
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: "Space Grotesk", sans-serif;
+            background-color: #ffffff;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .wave-layer {
+            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+        }
+        .perspective-container {
+            perspective: 1200px;
+        }
+    </style>
+</head>
+<body class="bg-white text-text-main overflow-x-hidden min-h-screen flex flex-col font-display antialiased selection:bg-slate-200 selection:text-black">
+<div class="flex flex-1 min-h-screen w-full">
+<div class="flex flex-col w-full lg:w-[45%] xl:w-[40%] relative z-30 bg-white border-r border-slate-200 shadow-2xl">
+<header class="px-8 py-6 lg:px-12 xl:px-16 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.8261 30.5736C16.7203 29.8826 20.2244 29.4783 24 29.4783C27.7756 29.4783 31.2797 29.8826 34.1739 30.5736C36.9144 31.2278 39.9967 32.7669 41.3563 33.8352L24.8486 7.36089C24.4571 6.73303 23.5429 6.73303 23.1514 7.36089L6.64374 33.8352C8.00331 32.7669 11.0856 31.2278 13.8261 30.5736Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M39.998 35.764C39.9944 35.7463 39.9875 35.7155 39.9748 35.6706C39.9436 35.5601 39.8949 35.4259 39.8346 35.2825C39.8168 35.2403 39.7989 35.1993 39.7813 35.1602C38.5103 34.2887 35.9788 33.0607 33.7095 32.5189C30.9875 31.8691 27.6413 31.4783 24 31.4783C20.3587 31.4783 17.0125 31.8691 14.2905 32.5189C12.0012 33.0654 9.44505 34.3104 8.18538 35.1832C8.17384 35.2075 8.16216 35.233 8.15052 35.2592C8.09919 35.3751 8.05721 35.4886 8.02977 35.589C8.00356 35.6848 8.00039 35.7333 8.00004 35.7388C8.00004 35.739 8 35.7393 8.00004 35.7388C8.00004 35.7641 8.0104 36.0767 8.68485 36.6314C9.34546 37.1746 10.4222 37.7531 11.9291 38.2772C14.9242 39.319 19.1919 40 24 40C28.8081 40 33.0758 39.319 36.0709 38.2772C37.5778 37.7531 38.6545 37.1746 39.3151 36.6314C39.9006 36.1499 39.9857 35.8511 39.998 35.764ZM4.95178 32.7688L21.4543 6.30267C22.6288 4.4191 25.3712 4.41909 26.5457 6.30267L43.0534 32.777C43.0709 32.8052 43.0878 32.8338 43.104 32.8629L41.3563 33.8352C43.104 32.8629 43.1038 32.8626 43.104 32.8629L43.1051 32.865L43.1065 32.8675L43.1101 32.8739L43.1199 32.8918C43.1276 32.906 43.1377 32.9246 43.1497 32.9473C43.1738 32.9925 43.2062 33.0545 43.244 33.1299C43.319 33.2792 43.4196 33.489 43.5217 33.7317C43.6901 34.1321 44 34.9311 44 35.7391C44 37.4427 43.003 38.7775 41.8558 39.7209C40.6947 40.6757 39.1354 41.4464 37.385 42.0552C33.8654 43.2794 29.133 44 24 44C18.867 44 14.1346 43.2794 10.615 42.0552C8.86463 41.4464 7.30529 40.6757 6.14419 39.7209C4.99695 38.7775 3.99999 37.4427 3.99999 35.7391C3.99999 34.8725 4.29264 34.0922 4.49321 33.6393C4.60375 33.3898 4.71348 33.1804 4.79687 33.0311C4.83898 32.9556 4.87547 32.8935 4.9035 32.8471C4.91754 32.8238 4.92954 32.8043 4.93916 32.7889L4.94662 32.777L4.95178 32.7688ZM35.9868 29.004L24 9.77997L12.0131 29.004C12.4661 28.8609 12.9179 28.7342 13.3617 28.6282C16.4281 27.8961 20.0901 27.4783 24 27.4783C27.9099 27.4783 31.5719 27.8961 34.6383 28.6282C35.082 28.7342 35.5339 28.8609 35.9868 29.004Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-main text-xl font-bold tracking-tight">Analytics Pro</h2>
+</div>
+<button aria-label="Toggle theme" class="relative p-2 rounded-full hover:bg-gray-100 transition-colors text-text-main group">
+<span class="material-symbols-outlined text-[24px]">light_mode</span>
+</button>
+</header>
+<div class="flex-1 flex flex-col justify-center px-8 lg:px-12 xl:px-16 py-8">
+<div class="max-w-[480px] w-full mx-auto">
+<h1 class="text-text-main text-4xl lg:text-5xl font-bold leading-tight mb-2 tracking-tight">Welcome back.</h1>
+<p class="text-text-muted text-lg mb-8">Enter your credentials to access the nexus dashboard.</p>
+<form class="flex flex-col gap-6" action="Dashboard/dashboard-final.html" method="get">
+<div class="flex flex-col gap-2">
+<label class="text-text-main text-sm font-medium ml-1" for="email">Email Address</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<input class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-4 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300" id="email" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center ml-1">
+<label class="text-text-main text-sm font-medium" for="password">Password</label>
+<a class="text-primary hover:text-primary-hover text-sm font-medium transition-colors hover:underline" href="#">Forgot password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-12 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-text-main transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<button class="mt-4 w-full bg-primary hover:bg-primary-hover text-white font-bold text-lg h-14 rounded-lg shadow-subtle hover:shadow-lg transition-all duration-300 transform active:scale-[0.99]" type="submit">
+                        Sign In
+                    </button>
+</form>
+<div class="relative my-8">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-gray-200"></div>
+</div>
+<div class="relative flex justify-center text-sm">
+<span class="bg-white px-4 text-text-muted">Or continue with</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 text-text-main h-14 rounded-lg transition-all duration-300 group shadow-sm" type="button">
+<svg class="w-5 h-5 transition-transform" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+<span class="font-medium">Google</span>
+</button>
+<p class="mt-8 text-center text-text-muted">
+                    Don't have an account? 
+                    <a class="text-primary hover:text-primary-hover font-bold hover:underline decoration-2 underline-offset-4" href="#">Sign up now</a>
+</p>
+</div>
+</div>
+<footer class="px-8 lg:px-12 xl:px-16 py-6 text-sm text-text-muted flex gap-6">
+<a class="hover:text-text-main transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-text-main transition-colors" href="#">Terms of Service</a>
+</footer>
+</div>
+<div class="hidden lg:flex lg:w-[55%] xl:w-[60%] relative bg-slate-50 overflow-hidden items-center justify-center">
+<div class="absolute inset-0 z-0">
+<div class="absolute -top-[10%] -left-[10%] w-[70%] h-[70%] rounded-full bg-blue-100/50 blur-[120px] animate-pulse-slow"></div>
+<div class="absolute top-[30%] -right-[15%] w-[60%] h-[60%] rounded-full bg-indigo-100/40 blur-[150px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+<div class="absolute -bottom-[20%] left-[10%] w-[50%] h-[50%] rounded-full bg-slate-200/50 blur-[100px] animate-pulse-slow" style="animation-delay: 1s;"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMTQ4LCAxNjMsIDE4NCwgMC4yKSIvPjwvc3ZnPg==')] opacity-10 bg-repeat"></div>
+</div>
+<div class="absolute inset-0 z-0 opacity-40">
+<svg class="absolute bottom-0 w-[200%] h-64 text-blue-200/40 animate-wave-1 wave-layer" preserveAspectRatio="none" viewBox="0 0 1440 320">
+<path d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,218.7C672,235,768,245,864,229.3C960,213,1056,171,1152,160C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" fill="currentColor"></path>
+</svg>
+<svg class="absolute bottom-0 w-[200%] h-80 text-slate-300/30 animate-wave-2 wave-layer" preserveAspectRatio="none" style="animation-delay: -2s;" viewBox="0 0 1440 320">
+<path d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,165.3C840,171,960,213,1080,224C1200,235,1320,213,1380,202.7L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z" fill="currentColor"></path>
+</svg>
+<svg class="absolute bottom-0 w-[200%] h-48 text-blue-300/25 animate-wave-3 wave-layer" preserveAspectRatio="none" style="animation-delay: -5s;" viewBox="0 0 1440 320">
+<path d="M0,128L80,144C160,160,320,192,480,192C640,192,800,160,960,149.3C1120,139,1280,149,1360,154.7L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z" fill="currentColor"></path>
+</svg>
+<svg class="absolute bottom-0 w-[200%] h-96 text-slate-200/20 animate-wave-4 wave-layer" preserveAspectRatio="none" style="animation-delay: -1s;" viewBox="0 0 1440 320">
+<path d="M0,256L60,240C120,224,240,192,360,192C480,192,600,224,720,229.3C840,235,960,213,1080,192C1200,171,1320,149,1380,138.7L1440,128L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z" fill="currentColor"></path>
+</svg>
+</div>
+<svg class="absolute inset-0 w-full h-full z-10 opacity-30 pointer-events-none">
+<path class="animate-dash-fast" d="M-100,200 Q400,100 900,300 T1900,100" fill="none" stroke="#60a5fa" stroke-dasharray="12,24" stroke-width="1"></path>
+<path class="animate-dash-fast" d="M-100,500 Q500,700 1100,400 T2100,600" fill="none" stroke="#94a3b8" stroke-dasharray="8,16" stroke-width="1" style="animation-delay: -3s; animation-duration: 12s;"></path>
+<path class="animate-dash-medium" d="M-200,400 C300,200 600,600 1200,300" fill="none" stroke="#bfdbfe" stroke-dasharray="15,30" stroke-width="2"></path>
+<path class="animate-dash-medium" d="M-150,800 C400,600 900,900 1500,500" fill="none" stroke="#cbd5e1" stroke-dasharray="20,40" stroke-width="1.5" style="animation-delay: -5s;"></path>
+<path class="animate-dash-slow" d="M0,100 L1600,900" fill="none" stroke="#e2e8f0" stroke-dasharray="5,15" stroke-width="1"></path>
+<path class="animate-dash-slow" d="M1600,100 L0,900" fill="none" stroke="#e2e8f0" stroke-dasharray="5,15" stroke-width="1" style="animation-delay: -10s;"></path>
+</svg>
+<div class="absolute inset-0 z-20 pointer-events-none">
+<div class="absolute top-[15%] left-[20%] w-3 h-3 bg-blue-400 rounded-full animate-ping-fast"></div>
+<div class="absolute top-[45%] left-[10%] w-2 h-2 bg-slate-400 rounded-full animate-pulse"></div>
+<div class="absolute top-[25%] right-[15%] w-3 h-3 bg-indigo-400 rounded-full animate-ping-fast" style="animation-delay: 0.5s;"></div>
+<div class="absolute bottom-[20%] left-[30%] w-2.5 h-2.5 bg-blue-500 rounded-full animate-ping-fast" style="animation-duration: 2s;"></div>
+<div class="absolute bottom-[40%] right-[25%] w-2 h-2 bg-slate-400 rounded-full animate-pulse" style="animation-delay: 1.5s;"></div>
+<div class="absolute top-[70%] left-[60%] w-2 h-2 bg-blue-300 rounded-full animate-pulse"></div>
+<div class="absolute top-[10%] left-[50%] w-2 h-2 bg-slate-300 rounded-full animate-pulse"></div>
+<div class="absolute bottom-[10%] right-[10%] w-3 h-3 bg-indigo-300 rounded-full animate-ping-fast" style="animation-delay: 2.5s;"></div>
+</div>
+<div class="relative z-30 flex flex-col items-center justify-center p-12 text-center">
+<div class="relative w-full max-w-lg h-80 mb-8 perspective-container">
+<div class="absolute -top-6 -left-12 p-3 bg-white/90 rounded-xl shadow-lg animate-float-delayed flex items-center gap-3 border border-slate-100/50 backdrop-blur-sm">
+<div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+<div class="h-2 w-16 bg-slate-100 rounded"></div>
+<div class="h-2 w-8 bg-slate-200 rounded"></div>
+</div>
+<div class="absolute -bottom-10 -right-10 p-4 bg-white/90 rounded-xl shadow-xl animate-float-fast border border-slate-100/50 backdrop-blur-sm">
+<div class="flex gap-2 mb-2">
+<div class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined text-sm">analytics</span>
+</div>
+<div class="space-y-1">
+<div class="h-2 w-20 bg-slate-200 rounded"></div>
+<div class="h-2 w-12 bg-slate-100 rounded"></div>
+</div>
+</div>
+<div class="w-full bg-slate-100 rounded-full h-1.5">
+<div class="bg-blue-500 h-1.5 rounded-full w-[78%]"></div>
+</div>
+</div>
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 p-6 glass-panel rounded-2xl shadow-[0_32px_80px_-20px_rgba(0,0,0,0.15)] transform rotate-[-3deg] animate-float transition-all hover:rotate-0 duration-500">
+<div class="flex items-center justify-between mb-6">
+<div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 text-sm">donut_large</span>
+</div>
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
+</div>
+</div>
+<div class="flex items-end gap-3 h-32 w-full pb-2">
+<div class="w-1/4 bg-slate-200 rounded-t-lg h-[40%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">40%</div>
+</div>
+<div class="w-1/4 bg-slate-300 rounded-t-lg h-[60%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">60%</div>
+</div>
+<div class="w-1/4 bg-blue-200 rounded-t-lg h-[55%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">55%</div>
+</div>
+<div class="w-1/4 bg-primary rounded-t-lg h-[90%] shadow-lg shadow-primary/20 relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">90%</div>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center">
+<div class="h-2 w-24 bg-slate-100 rounded"></div>
+<div class="text-xs text-green-600 font-bold flex items-center">
+<span class="material-symbols-outlined text-[12px] mr-0.5">trending_up</span>
+                            +14.2%
+                        </div>
+</div>
+</div>
+</div>
+<h2 class="text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight mb-4 relative z-30 drop-shadow-sm">
+                See the unseen.
+            </h2>
+<p class="text-lg text-slate-600 font-medium max-w-md mx-auto relative z-30">
+                Advanced analytics for the modern enterprise. <br/> Clarity in every byte.
+            </p>
+</div>
+</div>
+</div>
+
+</body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -36,8 +36,7 @@
     </script>
 <style type="text/tailwindcss">
         :root {
-            --primary-color: #f472b6;
-            --profit-line: #22d3ee;
+            --primary-color: #3f51b5;
         }
         body { font-family: 'Inter', sans-serif; }
         .donut-segment { transition: all 0.3s ease; }
@@ -89,6 +88,16 @@
         body.sidebar-collapsed aside > div:last-child > button:first-child {
             justify-content: center;
         }
+        /* Active navigation link styling */
+        .nav-link.active {
+            background-color: var(--slate-100);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .dark .nav-link.active {
+            background-color: var(--slate-800);
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
@@ -108,37 +117,37 @@
 <span>Ask Yua AI</span>
 </button>
 <div class="space-y-1">
-<a class="flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-800 text-primary font-semibold rounded-xl ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-800 text-primary font-semibold rounded-xl ui-hover" href="#" data-page="dashboard">
 <span class="material-symbols-outlined">dashboard</span>
 <span>Dashboard</span>
 </a>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="sources">
 <span class="material-symbols-outlined">database</span>
 <span>Data Sources</span>
 </a>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="favorites">
 <span class="material-symbols-outlined">star</span>
 <span>Favorites</span>
 </a>
 </div>
 <div class="space-y-1">
 <h3 class="px-3 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">MY DATA</h3>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="projects" onclick="window.location.href='../projects_tab.html'; return false;">
 <span class="material-symbols-outlined">folder_open</span>
-<span>My Files</span>
+<span>My Project</span>
 </a>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="datasets">
 <span class="material-symbols-outlined">table_chart</span>
 <span>Datasets</span>
 </a>
 </div>
 <div class="space-y-1">
 <h3 class="px-3 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">ANALYSIS</h3>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors ui-hover" href="#" data-page="analytics">
 <span class="material-symbols-outlined">insights</span>
 <span>Advanced Analytics</span>
 </a>
-<a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<a class="nav-link flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#" data-page="reports">
 <span class="material-symbols-outlined">description</span>
 <span>Reports</span>
 </a>
@@ -152,8 +161,8 @@
 </div>
 </aside>
 <main id="mainContent" class="ml-64 flex-1 flex flex-col min-w-0">
-<header class="h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4 px-4 md:px-8 sticky top-0 z-10">
-<div class="relative flex-1 min-w-[11rem] max-w-[clamp(16rem,52vw,52rem)]">
+<header class="h-20 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex-1 max-w-xl relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-indigo-500">auto_awesome</span>
 <input class="w-full pl-12 pr-16 py-3 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" placeholder="Type to search or ask Yua AI..." type="text"/>
 <div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 px-1.5 py-0.5 rounded text-[10px] text-slate-400 font-mono">
@@ -164,7 +173,7 @@
 <div class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
 <span class="material-symbols-outlined text-base">light_mode</span>
 <span class="text-sm font-medium">Dark Mode</span>
-<button class="w-12 h-6 bg-slate-300 dark:bg-emerald-500 rounded-full relative transition-all shadow-sm cursor-pointer hover:shadow-md" onclick="document.documentElement.classList.toggle('dark')">
+<button class="w-12 h-6 bg-slate-300 dark:bg-emerald-500 rounded-full relative transition-all shadow-sm cursor-pointer hover:shadow-md" onclick="toggleDarkMode()">
 <div class="absolute top-0.5 left-0.5 dark:left-6 w-5 h-5 bg-white rounded-full transition-all shadow-md flex items-center justify-center">
 <span class="material-symbols-outlined text-xs text-slate-600 dark:text-emerald-600">light_mode</span>
 </div>
@@ -391,16 +400,6 @@
 <div>
 <h4 class="text-base font-bold text-slate-900 dark:text-white">Revenue &amp; Profit Trend</h4>
 <p class="text-xs text-slate-400">Monthly performance with AI-driven insights</p>
-<div class="flex items-center gap-4 mt-2 text-[11px] font-medium text-slate-500 dark:text-slate-400">
-<div class="flex items-center gap-2">
-<span class="inline-block w-6 border-t-2 border-dashed" style="border-color: var(--primary-color);"></span>
-<span>Revenue (dotted)</span>
-</div>
-<div class="flex items-center gap-2">
-<span class="inline-block w-6 border-t-2" style="border-color: var(--profit-line);"></span>
-<span>Profit % (solid)</span>
-</div>
-</div>
 </div>
 <div class="flex gap-2 flex-wrap items-center">
 <button onclick="explainChart()" class="px-3 py-1.5 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 border border-amber-200 dark:border-amber-700/50 text-amber-700 dark:text-amber-400 text-xs font-bold rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-all flex items-center gap-2">
@@ -426,7 +425,7 @@
 
     <!-- JAN -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[40%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[40%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">JAN</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -449,7 +448,7 @@
 
     <!-- FEB -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[65%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[65%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">FEB</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -472,7 +471,7 @@
 
     <!-- MAR -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[55%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[55%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">MAR</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -495,7 +494,7 @@
 
     <!-- APR -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[80%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[80%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">APR</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -518,7 +517,7 @@
 
     <!-- MAY -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[75%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[75%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">MAY</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -564,7 +563,7 @@
 
     <!-- JUL -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[85%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[85%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">JUL</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -587,7 +586,7 @@
 
     <!-- AUG (standardized) -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[70%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[70%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">AUG</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -610,7 +609,7 @@
 
     <!-- SEP -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[70%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[70%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">SEP</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -633,7 +632,7 @@
 
     <!-- OCT -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[82%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[82%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">OCT</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -656,7 +655,7 @@
 
     <!-- NOV -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[78%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[78%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">NOV</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -679,7 +678,7 @@
 
     <!-- DEC -->
     <div class="flex-1 chart-bar chart-bar-hover relative h-full flex items-end cursor-pointer">
-        <div class="w-full bg-slate-200 dark:bg-slate-500/80 border border-slate-300 dark:border-slate-400/50 rounded-t-lg h-[90%] transition-all"></div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-t-lg h-[90%] transition-all"></div>
         <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-400">DEC</div>
         <div class="tooltip-trigger opacity-0 invisible absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-start transition-all duration-300 z-30">
             <div class="bg-slate-900 dark:bg-slate-800 text-white p-4 rounded-xl shadow-2xl min-w-[180px] -translate-y-24 ring-4 ring-white dark:ring-slate-900">
@@ -703,8 +702,8 @@
     <svg class="absolute inset-x-0 bottom-0 w-full h-full pointer-events-none px-4 pb-0" preserveAspectRatio="none" viewBox="0 0 100 100">
         <!-- Revenue dotted curve (primary color) based on actual monthly revenue data -->
         <path fill="none" d="M5 81 C12 77,18 72,25 68 C32 65,38 70,45 75 C52 72,58 69,65 71 C72 48,78 5,85 73 C90 72,96 70,100 70" stroke="var(--primary-color)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke-dasharray="3 5" opacity="0.9" vector-effect="non-scaling-stroke"></path>
-        <!-- Profit smooth curve (cyan) -->
-        <path fill="none" d="M5 80 C12 78,18 66,25 60 C32 54,38 40,45 35 C52 30,58 50,65 55 C72 60,78 50,85 45 C90 40,96 30,100 20" stroke="var(--profit-line)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+        <!-- Profit smooth curve (orange) -->
+        <path fill="none" d="M5 80 C12 78,18 66,25 60 C32 54,38 40,45 35 C52 30,58 50,65 55 C72 60,78 50,85 45 C90 40,96 30,100 20" stroke="#f97316" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" vector-effect="non-scaling-stroke"></path>
     </svg>
 </div>
 </div>
@@ -1503,6 +1502,58 @@ function toggleSidebar() {
     updateSidebarToggleButton();
 }
 
+// Dark mode toggle with localStorage persistence
+function toggleDarkMode() {
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    // Save preference to localStorage
+    if (html.classList.contains('dark')) {
+        localStorage.setItem('darkMode', 'true');
+    } else {
+        localStorage.setItem('darkMode', 'false');
+    }
+}
+
+// Initialize dark mode from localStorage on page load
+function initializeDarkMode() {
+    const darkModeSetting = localStorage.getItem('darkMode');
+    if (darkModeSetting === 'true') {
+        document.documentElement.classList.add('dark');
+    } else if (darkModeSetting === 'false') {
+        document.documentElement.classList.remove('dark');
+    }
+}
+
+// Call initialization on page load
+document.addEventListener('DOMContentLoaded', initializeDarkMode);
+initializeDarkMode();
+
+// Set active navigation link based on current page
+function setActiveNavLink() {
+  const currentPage = window.location.pathname;
+  const navLinks = document.querySelectorAll('.nav-link');
+  let activePage = 'dashboard'; // default for dashboard
+  
+  if (currentPage.includes('dashboard-final.html')) {
+    activePage = 'dashboard';
+  } else if (currentPage.includes('projects_tab.html')) {
+    activePage = 'projects';
+  }
+  
+  navLinks.forEach(link => {
+    link.classList.remove('active', 'bg-slate-100', 'dark:bg-slate-800', 'text-primary', 'font-semibold');
+    if (link.getAttribute('data-page') === activePage) {
+      link.classList.add('active', 'bg-slate-100', 'dark:bg-slate-800', 'text-primary', 'font-semibold');
+    }
+  });
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', setActiveNavLink);
+
+// Also set active on page load
+setActiveNavLink();
+
 syncSidebarForScreenSize();
 window.addEventListener('resize', syncSidebarForScreenSize);
 
@@ -1555,4 +1606,3 @@ document.addEventListener('click', function(e) {
 	// ]]>
 </script>
 </body></html>
-
