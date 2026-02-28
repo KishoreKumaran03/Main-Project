@@ -130,19 +130,10 @@
                 </div>
             </div>
             <div class="flex items-center gap-6">
-                <div class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                    <span class="material-symbols-outlined text-base">light_mode</span>
-                    <span class="text-sm font-medium">Dark Mode</span>
-                    <button
-                        class="w-12 h-6 bg-slate-300 dark:bg-emerald-500 rounded-full relative transition-all shadow-sm cursor-pointer hover:shadow-md"
-                        onclick="toggleDarkMode()">
-                        <div
-                            class="absolute top-0.5 left-0.5 dark:left-6 w-5 h-5 bg-white rounded-full transition-all shadow-md flex items-center justify-center">
-                            <span
-                                class="material-symbols-outlined text-xs text-slate-600 dark:text-emerald-600">light_mode</span>
-                        </div>
-                    </button>
-                </div>
+                <button class="theme-toggle-btn p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full">
+    <span class="material-symbols-outlined icon-dark">dark_mode</span>
+    <span class="material-symbols-outlined icon-light hidden">light_mode</span>
+</button>
                 <button
                     class="bg-primary text-white px-6 py-2.5 rounded-xl font-medium flex items-center gap-2 hover:opacity-90 shadow-lg shadow-primary/20 transition-all ui-hover">
                     <span class="material-symbols-outlined text-sm">add</span>
@@ -1782,31 +1773,8 @@ Why does the pattern look like this?
             updateSidebarToggleButton();
         }
 
-        // Dark mode toggle with localStorage persistence
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            html.classList.toggle('dark');
-            // Save preference to localStorage
-            if (html.classList.contains('dark')) {
-                localStorage.setItem('darkMode', 'true');
-            } else {
-                localStorage.setItem('darkMode', 'false');
-            }
-        }
-
-        // Initialize dark mode from localStorage on page load
-        function initializeDarkMode() {
-            const darkModeSetting = localStorage.getItem('darkMode');
-            if (darkModeSetting === 'true') {
-                document.documentElement.classList.add('dark');
-            } else if (darkModeSetting === 'false') {
-                document.documentElement.classList.remove('dark');
-            }
-        }
-
-        // Call initialization on page load
-        document.addEventListener('DOMContentLoaded', initializeDarkMode);
-        initializeDarkMode();
+        // Dark mode is handled by shared script (js/theme-toggle.js)
+        // previous toggle functions removed to avoid duplication
 
         // Set active navigation link based on current page
         function setActiveNavLink() {
@@ -1885,6 +1853,7 @@ Why does the pattern look like this?
         }
         // ]]>
     </script>
+<script src="../js/theme-toggle.js"></script>
 </body>
 
 </html>

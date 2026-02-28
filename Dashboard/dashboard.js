@@ -395,21 +395,8 @@ function toggleSidebar() {
     updateSidebarToggleButton();
 }
 
-// ── Dark Mode ─────────────────────────────────────────────────
-function toggleDarkMode() {
-    const html = document.documentElement;
-    html.classList.toggle('dark');
-    localStorage.setItem('darkMode', html.classList.contains('dark') ? 'true' : 'false');
-}
-
-function initializeDarkMode() {
-    const darkModeSetting = localStorage.getItem('darkMode');
-    if (darkModeSetting === 'true') {
-        document.documentElement.classList.add('dark');
-    } else if (darkModeSetting === 'false') {
-        document.documentElement.classList.remove('dark');
-    }
-}
+// Dark mode handling has been moved to js/theme-toggle.js.  Use the universal
+// theme-toggle-btn class and the shared script for toggling and persistence.
 
 // ── Active Navigation Link ────────────────────────────────────
 function setActiveNavLink() {

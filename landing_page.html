@@ -150,7 +150,7 @@
 <span class="font-extrabold text-xl text-blue-600 tracking-tighter dark:text-white">mambo.ai</span>
 </div>
 <div class="hidden md:flex items-center gap-3 h-full">
-<button aria-label="Toggle Dark Mode" class="theme-toggle-btn mr-1" id="theme-switcher">
+<button aria-label="Toggle Dark Mode" class="theme-toggle-btn mr-1">
 <span class="material-symbols-outlined text-[20px] hidden dark:inline-block">dark_mode</span> 
 <span class="material-symbols-outlined text-[20px] inline-block dark:hidden">light_mode</span> 
 </button>
@@ -158,7 +158,7 @@
 <button class="bg-blue-600 text-white px-5 h-[36px] rounded-full font-bold text-sm hover:bg-blue-700 transition-colors flex items-center justify-center shadow-lg shadow-blue-500/30 dark:shadow-blue-900/50">Sign Up</button>
 </div>
 <div class="md:hidden flex items-center gap-4">
-<button aria-label="Toggle Dark Mode" class="theme-toggle-btn" id="theme-switcher-mobile">
+<button aria-label="Toggle Dark Mode" class="theme-toggle-btn">
 <span class="material-symbols-outlined text-[20px] hidden dark:inline-block">dark_mode</span>
 <span class="material-symbols-outlined text-[20px] inline-block dark:hidden">light_mode</span>
 </button>
@@ -264,22 +264,8 @@
             </button>
 </section>
 </main>
-<script>
-        const themeToggleBtn = document.getElementById('theme-switcher');
-        const themeToggleBtnMobile = document.getElementById('theme-switcher-mobile');
-        const htmlElement = document.documentElement;
-        function toggleTheme() {
-            if (htmlElement.classList.contains('dark')) {
-                htmlElement.classList.remove('dark');
-                htmlElement.classList.add('light');
-            } else {
-                htmlElement.classList.remove('light');
-                htmlElement.classList.add('dark');
-            }
-        }
-        themeToggleBtn.addEventListener('click', toggleTheme);
-        if(themeToggleBtnMobile) themeToggleBtnMobile.addEventListener('click', toggleTheme);
-    </script>
+<script src="js/theme-toggle.js"></script>
 
-</body></html>
+</body>
+</html>
 
