@@ -102,14 +102,17 @@
 <div class="max-w-[480px] w-full mx-auto">
 <h1 class="text-text-main text-4xl lg:text-5xl font-bold leading-tight mb-2 tracking-tight">Welcome back.</h1>
 <p class="text-text-muted text-lg mb-8">Enter your credentials to access the nexus dashboard.</p>
-<form class="flex flex-col gap-6" action="Dashboard/dashboard-final.html" method="get">
+<form class="flex flex-col gap-6" action="Dashboard/dashboard-final.html" method="get" onsubmit="return validateForm()">
+    <div id="error-message" class="text-red-600 text-sm mb-2"></div>
+
 <div class="flex flex-col gap-2">
 <label class="text-text-main text-sm font-medium ml-1" for="email">Email Address</label>
 <div class="relative group">
 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
 <span class="material-symbols-outlined text-[20px]">mail</span>
 </div>
-<input class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-4 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300" id="email" placeholder="name@company.com" type="email"/>
+<input class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-4 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300" id="email" placeholder="name@company.com" type="email" required pattern=".+@.+" title="Invalid email address"/>
+
 </div>
 </div>
 <div class="flex flex-col gap-2">
@@ -121,7 +124,8 @@
 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
 <span class="material-symbols-outlined text-[20px]">lock</span>
 </div>
-<input class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-12 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300" id="password" placeholder="••••••••" type="password"/>
+<input class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-12 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300" id="password" placeholder="••••••••" type="password" required minlength="8" title="Password must be at least 8 characters."/>
+
 <button class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-text-main transition-colors" type="button">
 <span class="material-symbols-outlined text-[20px]">visibility</span>
 </button>
@@ -158,6 +162,26 @@
 <a class="hover:text-text-main transition-colors" href="#">Privacy Policy</a>
 <a class="hover:text-text-main transition-colors" href="#">Terms of Service</a>
 </footer>
+
+<!-- validation script -->
+<script>
+function validateForm() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    if (!email.includes('@')) {
+        const err = document.getElementById('error-message');
+        err.textContent = 'invalid email';
+        return false;
+    }
+    if (password.length < 8) {
+        const err = document.getElementById('error-message');
+        err.textContent = 'Password must be at least 8 characters.';
+        return false;
+    }
+    return true;
+}
+</script>
+
 </div>
 <div class="hidden lg:flex lg:w-[55%] xl:w-[60%] relative bg-slate-50 overflow-hidden items-center justify-center">
 <div class="absolute inset-0 z-0">
