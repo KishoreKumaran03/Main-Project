@@ -2,17 +2,26 @@
 
 function toggleDarkMode() {
     const html = document.documentElement;
-    html.classList.toggle('dark');
-    localStorage.setItem('darkMode', html.classList.contains('dark'));
+    const enableDark = !html.classList.contains('dark');
+    html.classList.toggle('dark', enableDark);
+    html.classList.toggle('light', !enableDark);
+    localStorage.setItem('darkMode', String(enableDark));
     updateToggleIcons();
 }
 
 function initializeDarkMode() {
     const setting = localStorage.getItem('darkMode');
-    if (setting === 'true') {
+    if (setting === null) {
+        // First visit: persist light mode as the default.
+        localStorage.setItem('darkMode', 'false');
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+    } else if (setting === 'true') {
         document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
     } else if (setting === 'false') {
         document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
     }
     updateToggleIcons();
 }
