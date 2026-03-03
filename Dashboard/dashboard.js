@@ -201,8 +201,8 @@ document.addEventListener('click', function (e) {
 // ── Donut Chart Hover Effects ─────────────────────────────────
 const categoryData = {
     electronics: { name: 'Electronics', value: '₹13.4L', percent: '50%', growth: '+18%' },
-    furniture:   { name: 'Furniture',   value: '₹8.0L',  percent: '30%', growth: '+12%' },
-    others:      { name: 'Others',      value: '₹5.3L',  percent: '20%', growth: '+8%'  }
+    furniture: { name: 'Furniture', value: '₹8.0L', percent: '30%', growth: '+12%' },
+    others: { name: 'Others', value: '₹5.3L', percent: '20%', growth: '+8%' }
 };
 
 function hoverCategory(category) {
@@ -372,7 +372,7 @@ document.addEventListener('click', function (e) {
 const SIDEBAR_AUTO_COLLAPSE_BREAKPOINT = 1024;
 
 function updateSidebarToggleButton() {
-    const toggleBtn  = document.getElementById('sidebarRailToggle');
+    const toggleBtn = document.getElementById('sidebarRailToggle');
     const toggleIcon = document.getElementById('sidebarRailToggleIcon');
     const isCollapsed = document.body.classList.contains('sidebar-collapsed');
     if (!toggleBtn || !toggleIcon) return;
@@ -408,6 +408,8 @@ function setActiveNavLink() {
         activePage = 'dashboard';
     } else if (currentPage.includes('projects_tab.html')) {
         activePage = 'projects';
+    } else if (currentPage.includes('Data-conversion')) {
+        activePage = 'analytics';
     }
 
     navLinks.forEach(link => {
