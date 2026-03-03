@@ -169,12 +169,13 @@
 </div>
 </div>
 <div class="flex items-center gap-4 ml-4">
-<button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-700">
+<button id="importDataBtn" class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-indigo-700" onclick="window.location.href='Data-conversion/1.Bar graph.html';">
 <span class="material-symbols-outlined text-lg">upload_file</span>
 <span>Import Data</span>
 </button>
-<button class="p-2 text-gray-500 hover:bg-gray-100 rounded-full" onclick="toggleDarkMode()">
-<span class="material-symbols-outlined">dark_mode</span>
+<button class="theme-toggle-btn p-2 text-gray-500 hover:bg-gray-100 rounded-full">
+    <span class="material-symbols-outlined icon-dark">dark_mode</span>
+    <span class="material-symbols-outlined icon-light hidden">light_mode</span>
 </button>
 <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-full relative">
 <span class="material-symbols-outlined">notifications</span>
@@ -367,31 +368,9 @@ function toggleSidebar() {
   }
 }
 
-// Dark mode toggle with localStorage persistence
-function toggleDarkMode() {
-    const html = document.documentElement;
-    html.classList.toggle('dark');
-    // Save preference to localStorage
-    if (html.classList.contains('dark')) {
-        localStorage.setItem('darkMode', 'true');
-    } else {
-        localStorage.setItem('darkMode', 'false');
-    }
-}
+// Dark mode handled by shared script
+// initialization and toggle functions live in js/theme-toggle.js
 
-// Initialize dark mode from localStorage on page load
-function initializeDarkMode() {
-    const darkModeSetting = localStorage.getItem('darkMode');
-    if (darkModeSetting === 'true') {
-        document.documentElement.classList.add('dark');
-    } else if (darkModeSetting === 'false') {
-        document.documentElement.classList.remove('dark');
-    }
-}
-
-// Call initialization on page load
-document.addEventListener('DOMContentLoaded', initializeDarkMode);
-initializeDarkMode();
 
 // Set active navigation link based on current page
 function setActiveNavLink() {
@@ -441,5 +420,6 @@ modal.addEventListener('click', (e) => {
   if (e.target === modal.firstElementChild) closeModal();
 });
 </script>
+<script src="js/theme-toggle.js"></script>
 </body>
 </html>
