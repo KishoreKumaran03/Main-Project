@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Analytics Pro Sign Up - Join the Nexus</title>
+    <title>Analytics Pro Login - Light Enhanced</title>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
@@ -66,7 +66,6 @@
         }
     </script>
     <link rel="stylesheet" href="js/global.css">
-    </style>
 </head>
 
 <body
@@ -96,28 +95,32 @@
             </header>
             <div class="flex-1 flex flex-col justify-center px-8 lg:px-12 xl:px-16 py-8">
                 <div class="max-w-[480px] w-full mx-auto">
-                    <h1 class="text-text-main text-4xl lg:text-5xl font-bold leading-tight mb-2 tracking-tight">Create
-                        account.</h1>
-                    <p class="text-text-muted text-lg mb-8">Join the nexus analytics platform today.</p>
-                    <form class="flex flex-col gap-5" id="signup-form" onsubmit="return validateSignupForm()">
-                        <div id="error-message" class="text-red-600 text-sm mb-2 font-medium"></div>
+                    <h1 class="text-text-main text-4xl lg:text-5xl font-bold leading-tight mb-2 tracking-tight">Welcome
+                        back.</h1>
+                    <p class="text-text-muted text-lg mb-8">Enter your credentials to access the nexus dashboard.</p>
+                    <form class="flex flex-col gap-6" onsubmit="return validateForm(event)">
+                        <div id="error-message" class="text-red-600 text-sm mb-2"></div>
 
                         <div class="flex flex-col gap-2">
-                            <label class="text-text-main text-sm font-medium ml-1" for="username">Email or
-                                Username</label>
+                            <label class="text-text-main text-sm font-medium ml-1" for="email">Email Address</label>
                             <div class="relative group">
                                 <div
                                     class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                                    <span class="material-symbols-outlined text-[20px]">person</span>
+                                    <span class="material-symbols-outlined text-[20px]">mail</span>
                                 </div>
                                 <input
                                     class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-4 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300"
-                                    id="username" placeholder="name@company.com or username" type="text" required />
+                                    id="email" placeholder="name@company.com" type="email" required pattern=".+@.+"
+                                    title="Invalid email address" />
+
                             </div>
                         </div>
-
                         <div class="flex flex-col gap-2">
-                            <label class="text-text-main text-sm font-medium ml-1" for="password">Password</label>
+                            <div class="flex justify-between items-center ml-1">
+                                <label class="text-text-main text-sm font-medium" for="password">Password</label>
+                                <a class="text-primary hover:text-primary-hover text-sm font-medium transition-colors hover:underline"
+                                    href="#">Forgot password?</a>
+                            </div>
                             <div class="relative group">
                                 <div
                                     class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
@@ -125,53 +128,30 @@
                                 </div>
                                 <input
                                     class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-12 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300"
-                                    id="password" placeholder="••••••••" type="password" required minlength="8" />
+                                    id="password" placeholder="••••••••" type="password" required minlength="8"
+                                    title="Password must be at least 8 characters." />
+
                                 <button
                                     class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-text-main transition-colors"
-                                    type="button" onclick="togglePassword('password')">
-                                    <span class="material-symbols-outlined text-[20px]"
-                                        id="password-icon">visibility</span>
+                                    type="button">
+                                    <span class="material-symbols-outlined text-[20px]">visibility</span>
                                 </button>
                             </div>
                         </div>
-
-                        <div class="flex flex-col gap-2">
-                            <label class="text-text-main text-sm font-medium ml-1" for="confirm-password">Confirm
-                                Password</label>
-                            <div class="relative group">
-                                <div
-                                    class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                                    <span class="material-symbols-outlined text-[20px]">verified_user</span>
-                                </div>
-                                <input
-                                    class="form-input w-full bg-white border border-input-border rounded-lg h-14 pl-12 pr-12 text-text-main placeholder:text-gray-400 focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all duration-300"
-                                    id="confirm-password" placeholder="••••••••" type="password" required
-                                    minlength="8" />
-                                <button
-                                    class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-text-main transition-colors"
-                                    type="button" onclick="togglePassword('confirm-password')">
-                                    <span class="material-symbols-outlined text-[20px]"
-                                        id="confirm-password-icon">visibility</span>
-                                </button>
-                            </div>
-                        </div>
-
                         <button
                             class="mt-4 w-full bg-primary hover:bg-primary-hover text-white font-bold text-lg h-14 rounded-lg shadow-subtle hover:shadow-lg transition-all duration-300 transform active:scale-[0.99]"
                             type="submit">
-                            Sign Up
+                            Sign In
                         </button>
                     </form>
-
-                    <div class="relative my-6">
+                    <div class="relative my-8">
                         <div class="absolute inset-0 flex items-center">
                             <div class="w-full border-t border-gray-200"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="bg-white px-4 text-text-muted font-medium">Or sign up with</span>
+                            <span class="bg-white px-4 text-text-muted">Or continue with</span>
                         </div>
                     </div>
-
                     <div class="flex flex-col gap-4">
                         <button
                             class="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 text-text-main h-14 rounded-lg transition-all duration-300 group shadow-sm"
@@ -209,9 +189,9 @@
                     </div>
 
                     <p class="mt-8 text-center text-text-muted">
-                        Already have an account?
+                        Don't have an account?
                         <a class="text-primary hover:text-primary-hover font-bold hover:underline decoration-2 underline-offset-4"
-                            href="login.html">Sign in</a>
+                            href="signup.html">Sign up now</a>
                     </p>
                 </div>
             </div>
@@ -222,43 +202,27 @@
 
             <!-- validation script -->
             <script>
-                function togglePassword(id) {
-                    const input = document.getElementById(id);
-                    const icon = document.getElementById(id + '-icon');
-                    if (input.type === 'password') {
-                        input.type = 'text';
-                        icon.textContent = 'visibility_off';
-                    } else {
-                        input.type = 'password';
-                        icon.textContent = 'visibility';
-                    }
-                }
-
-                function validateSignupForm() {
-                    const username = document.getElementById('username').value;
+                function validateForm(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('email').value;
                     const password = document.getElementById('password').value;
-                    const confirmPassword = document.getElementById('confirm-password').value;
                     const err = document.getElementById('error-message');
-
                     err.textContent = '';
-
-                    if (password !== confirmPassword) {
-                        err.textContent = 'Passwords do not match.';
+                    if (!email.includes('@')) {
+                        err.textContent = 'Invalid email address.';
                         return false;
                     }
-
                     if (password.length < 8) {
                         err.textContent = 'Password must be at least 8 characters.';
                         return false;
                     }
-
-                    // Success - redirect to dashboard as placeholder
+                    // Redirect to dashboard without leaking credentials in URL
                     window.location.href = 'Dashboard/dashboard-final.html';
-                    return false; // Prevent form submission for this demo
+                    return false;
                 }
             </script>
-        </div>
 
+        </div>
         <div
             class="hidden lg:flex lg:w-[55%] xl:w-[60%] relative bg-slate-50 overflow-hidden items-center justify-center">
             <div class="absolute inset-0 z-0">
@@ -323,6 +287,10 @@
                     style="animation-duration: 2s;"></div>
                 <div class="absolute bottom-[40%] right-[25%] w-2 h-2 bg-slate-400 rounded-full animate-pulse"
                     style="animation-delay: 1.5s;"></div>
+                <div class="absolute top-[70%] left-[60%] w-2 h-2 bg-blue-300 rounded-full animate-pulse"></div>
+                <div class="absolute top-[10%] left-[50%] w-2 h-2 bg-slate-300 rounded-full animate-pulse"></div>
+                <div class="absolute bottom-[10%] right-[10%] w-3 h-3 bg-indigo-300 rounded-full animate-ping-fast"
+                    style="animation-delay: 2.5s;"></div>
             </div>
             <div class="relative z-30 flex flex-col items-center justify-center p-12 text-center">
                 <div class="relative w-full max-w-lg h-80 mb-8 perspective-container">
@@ -392,10 +360,10 @@
                 </div>
                 <h2
                     class="text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight mb-4 relative z-30 drop-shadow-sm">
-                    Begin your journey.
+                    See the unseen.
                 </h2>
                 <p class="text-lg text-slate-600 font-medium max-w-md mx-auto relative z-30">
-                    Join the enterprise-grade analytics platform. <br /> Insights await you.
+                    Advanced analytics for the modern enterprise. <br /> Clarity in every byte.
                 </p>
             </div>
         </div>
